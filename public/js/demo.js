@@ -84,40 +84,15 @@ var DEMO = {
 		this.ms_Camera.position.set(0, 600, 0);
 		//this.ms_Camera.lookAt(new THREE.Vector3(0, 0, 0));
 		this.ms_Camera.rotation.z = Math.PI / 2;
-
-		// Initialize Orbit control		
-		// this.ms_Controls = new THREE.OrbitControls(this.ms_Camera, this.ms_Renderer.domElement);
 	
 		// Add light
 		var directionalLight = new THREE.DirectionalLight(0xffff55, 1);
 		directionalLight.position.set(0, 500, 1000);
 		this.ms_Scene.add(directionalLight);
 		
-		// Load textures		
-		var waterNormals = new THREE.ImageUtils.loadTexture('/img/waternormals.jpg');
-		waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping; 
+		// Create the water plane
 		
-		// Create the water effect
-		this.ms_Water = new THREE.Water(this.ms_Renderer, this.ms_Camera, this.ms_Scene, {
-			textureWidth: 256,
-			textureHeight: 256,
-			waterNormals: waterNormals,
-			alpha: 	1.0,
-			sunDirection: directionalLight.position.normalize(),
-			sunColor: 0xffffff,
-			waterColor: 0x001e0f,
-			betaVersion: 0,
-			side: THREE.DoubleSide
-		});
-		var aMeshMirror = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry(6000, 4000, 10, 10), 
-			this.ms_Water.material
-		);
-		aMeshMirror.add(this.ms_Water);
-		aMeshMirror.rotation.x = - Math.PI * 0.5;
-		//aMeshMirror.rotation.z = Math.PI * 0.5;
-		
-		this.ms_Scene.add(aMeshMirror);
+
 
 		// create a cube
         var cubeGeometry = new THREE.BoxGeometry(8, 8, 200);
@@ -129,9 +104,6 @@ var DEMO = {
 
         // add the cube to the scene
         this.ms_Scene.add(this.ms_Canoa);
-
-	
-		this.loadSkyBox();
 
 		this.ms_Time = 0;
 
@@ -152,48 +124,16 @@ var DEMO = {
         document.body.appendChild( this.ms_stats.domElement );		
 
 	},
-	
-	loadSkyBox: function loadSkyBox() {
-		var aCubeMap = THREE.ImageUtils.loadTextureCube([
-		  '/img/px.jpg',
-		  '/img/nx.jpg',
-		  '/img/py.jpg',
-		  '/img/ny.jpg',
-		  '/img/pz.jpg',
-		  '/img/nz.jpg'
-		]);
-		aCubeMap.format = THREE.RGBFormat;
-
-		var aShader = THREE.ShaderLib['cube'];
-		aShader.uniforms['tCube'].value = aCubeMap;
-
-		var aSkyBoxMaterial = new THREE.ShaderMaterial({
-		  fragmentShader: aShader.fragmentShader,
-		  vertexShader: aShader.vertexShader,
-		  uniforms: aShader.uniforms,
-		  depthWrite: false,
-		  side: THREE.BackSide
-		});
-
-		var aSkybox = new THREE.Mesh(
-		  new THREE.BoxGeometry(1000000, 1000000, 1000000),
-		  aSkyBoxMaterial
-		);
-		
-		this.ms_Scene.add(aSkybox);
-	},
 
 
 
     display: function display() {
-		this.ms_Water.render();
 		this.ms_Renderer.render(this.ms_Scene, this.ms_Camera);
 		if (gyro != undefined) document.getElementById("Acceleration").innerHTML = "X: " + this.ms_Canoa.rotation.x + " Y: " + this.ms_Canoa.rotation.y + " Z: " + this.ms_Canoa.rotation.z;
 	},
 	
 	update: function update() {
 		this.ms_Time += 0.007;
-		this.ms_Water.material.uniforms.time.value += 1.0 / 60.0;
 		
 		var q=computeOrientationQuaternion(); //w,x,y,z
 		var quot = new THREE.Quaternion(); 
@@ -209,20 +149,16 @@ var DEMO = {
 		refX = this.ms_Canoa.rotation.x;
 
 
-		//this.ms_Canoa.rotation.z = 2 * Math.PI * acc[2] / 360; //noise.perlin2(this.ms_Time, 2) * Math.PI * 0.02;
-		//this.ms_Canoa.rotation.x = -2 * Math.PI * acc[1] / 360; //noise.perlin2(this.ms_Time, 1) * Math.PI * 0.02;
-		//this.ms_Canoa.rotation.y = 2 * Math.PI * acc[0] / 360;
+
 		this.ms_Canoa.position.z = this.ms_Canoa.position.z + distX;
-		//this.ms_Camera.position.x = this.ms_Canoa.position.x;
-		//this.ms_Camera.position.y = this.ms_Canoa.position.y + 500;
+
 		this.ms_Camera.position.z = this.ms_Canoa.position.z;
-		//this.ms_Camera.rotation.y = -Math.PI / 2;
+
 
 
 
 		this.display();
 		this.ms_stats.update();
-		//console.log(acc);
 
 	},
 	
