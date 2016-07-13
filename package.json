@@ -1,0 +1,24 @@
+{
+  "name": "canoa_game",
+  "version": "1.0.0",
+  "description": "Summer game by Espadaysantacruz SC",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kike-Ramirez/canoaGame.git"
+  },
+  "keywords": [
+    "canoa",
+    "game"
+  ],
+  "author": "Kike Ramírez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kike-Ramirez/canoaGame/issues"
+  },
+  "homepage": "https://github.com/Kike-Ramirez/canoaGame#readme"
+}
