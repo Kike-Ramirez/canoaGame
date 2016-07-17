@@ -16,8 +16,8 @@ app.get('/remo', function(req, res){
 
 
 io.on('connection', function(socket){  
-  socket.on('acc', function(msg){
-    io.emit('acc', msg);
+  socket.on('acc0', function(msg){
+    io.emit('acc0', msg);
   });
 });
 
