@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic River</title>
+    <script src="/libs/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<script>
+
+    // global variables
+    var renderer;
+    var scene;
+    var camera;
+    var river;
+    var canoa0, canoa1;
+
+    /**
+     * Initializes the scene, camera and objects. Called when the window is
+     * loaded by using window.onload (see below)
+     */
+    function init() {
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2500);
+
+
+        // create a render, sets the background color and the size
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000, 1.0);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        // create the canoas
+        canoa0 = new Canoa(0, scene);
+        canoa1 = new Canoa(1, scene);
+
+        canoa0.initCanoa();
+        canoa1.initCanoa();
+
+        // create the River
+        river = new River(1, scene); 
+        river.initRiver();
+
+
+
+        var ambientLight = new THREE.AmbientLight(0xffffff);
+        scene.add(ambientLight);
+
+
+        // add the output of the renderer to the html element
+        document.body.appendChild(renderer.domElement);
+
+        // call the render function, after the first render, interval is determined
+        // by requestAnimationFrame
+        render();
+    }
+
+    /**
+     * Called when the scene needs to be rendered. Delegates to requestAnimationFrame
+     * for future renders
+     */
+    function render() {
+        // render using requestAnimationFrame
+        canoa0.updateCanoa();
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+    }
+
+
+    /**
+     * Function handles the resize event. This make sure the camera and the renderer
+     * are updated at the correct moment.
+     */
+    function handleResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function River(jugador, scene) {
+        this.jugador = jugador;
+        this.scene = scene;
+        this.texture = undefined;
+
+        this.initRiver = function() {
+
+            // create the ground plane
+            var plane, plane2;
+            var planeGeometry = new THREE.PlaneGeometry(1920, 1080);
+            var planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" )
+            planeTexture.minFilter = THREE.NearestFilter;
+            var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, map: planeTexture });
+            plane = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane.receiveShadow = false;
+            plane2.receiveShadow = false;
+
+            // rotate and position the plane
+            //plane.rotation.x = -0.0 * Math.PI20
+            plane.position.x = 0;
+            plane.position.y = 0;
+            plane.position.z = 0;
+
+            plane2.position.x = 0;
+            plane2.position.y = 1080;
+            plane2.position.z = 0;
+            
+            //.rotation.y = Math.PI / 4;
+            //plane.rotation.x = Math.PI / 4;
+
+            // add the plane to the scene
+            scene.add(plane);
+            scene.add(plane2);
+
+            // position and point the camera to the center of the scene
+            camera.position.y = 0;
+            camera.position.z = 600;
+
+            if (this.jugador == 0) {
+                camera.position.x = -200;
+                camera.lookAt(canoa0.canoa.position);
+            }
+            else if (this.jugador == 1) {
+                camera.position.x = 200;
+                camera.lookAt(canoa1.canoa.position);
+            }
+                
+        }
+
+    }
+
+
+    function Canoa(jugador, scene) {
+      this.jugador = jugador;
+      this.scene = scene;
+      this.canoa = undefined;
+      this.speed = undefined;
+      this.socket = undefined;
+      this.texture = undefined;
+      this.gyro = undefined;
+
+      this.initCanoa =  function() {
+        var canoaGeometry = new THREE.BoxGeometry(100, 200, 6);
+        var canoaMaterial = new THREE.MeshLambertMaterial({color: 'orange'});
+        var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial);
+        this.canoa = canoa;
+        this.speed =  new THREE.Vector3( 0, 0, 0 );
+        this.gyro = new THREE.Vector4( 0, 0, 0, 0 );
+
+        this.canoa.castShadow = true;
+
+        this.socket = io();
+
+
+        if (this.jugador == 0) {
+            this.canoa.position.x = -200;
+
+            this.socket.on('acc0', function(msg){
+                var acc =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
+                this.gyro=this.computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
+            });
+
+        }
+        else if (this.jugador == 1) {
+            this.canoa.position.x = 200;
+            this.socket.on('acc1', function(msg){
+                var acc =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
+                this.gyro=this.computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
+            });        
+        }
+
+        // add the cube to the scene
+        this.scene.add(this.canoa);
+      };
+
+      this.updateCanoa = function() {
+
+        // Move canoa
+        console.log(this.gyro);
+      }
+
+      this.computeQuaternionFromEulers = function(alpha, beta, gamma) {
+
+        var _x = beta * degtorad ; // beta value
+        var _y = gamma * degtorad ; // gamma value
+        var _z = alpha * degtorad ; // alpha value
+
+        var cX = Math.cos( _x/2 );
+        var cY = Math.cos( _y/2 );
+        var cZ = Math.cos( _z/2 );
+        var sX = Math.sin( _x/2 );
+        var sY = Math.sin( _y/2 );
+        var sZ = Math.sin( _z/2 );
+
+        //
+        // ZXY quaternion construction.
+        //
+
+        var w = cX * cY * cZ - sX * sY * sZ;
+        var x = sX * cY * cZ - cX * sY * sZ;
+        var y = cX * sY * cZ + sX * cY * sZ;
+        var z = cX * cY * sZ + sX * sY * cZ;
+
+        //return [ w, x, y, z ];
+        return {"x":x,"y":y,"z":z,"w":w};//return a simple object with the four quaternion values
+
+      }
+
+    }
+
+
+    function initRiver() {
+
+
+
+    }
+
+    // calls the init function when the window is done loading.
+    window.onload = init;
+    // calls the handleResize function when the window is resized
+    window.addEventListener('resize', handleResize, false);
+
+</script>
+<body>
+</body>
+</html>

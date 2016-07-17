@@ -54,7 +54,7 @@ var DEMO = {
 	ms_Renderer: null,
 	ms_Camera: null, 
 	ms_Scene: null, 
-	ms_Water: null,
+	ms_Plane: null,
 	ms_Canoa: null,
 	ms_Time: null,
 	ms_stats: null,
@@ -81,8 +81,8 @@ var DEMO = {
 		this.ms_Scene = new THREE.Scene();
 		
 		this.ms_Camera = new THREE.PerspectiveCamera(55.0, WINDOW.ms_Width / WINDOW.ms_Height, 0.5, 3000000);
-		this.ms_Camera.position.set(0, 600, 0);
-		//this.ms_Camera.lookAt(new THREE.Vector3(0, 0, 0));
+		this.ms_Camera.position.set(0, 1000, 0);
+		this.ms_Camera.lookAt(new THREE.Vector3(0, 0, 0));
 		this.ms_Camera.rotation.z = Math.PI / 2;
 	
 		// Add light
@@ -91,11 +91,29 @@ var DEMO = {
 		this.ms_Scene.add(directionalLight);
 		
 		// Create the water plane
-		
+		var planeTexture, planeMaterial;
+
+		planeTexture = THREE.ImageUtils.loadTexture( "../img/fondo.png" )
+		planeTexture.minFilter = THREE.NearestFilter;
+
+		planeMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, map: planeTexture } );
+		//planeMaterial = new THREE.MeshPhongMaterial({color: 'white'});
+
+		//material = new THREE.MeshLambertMaterial({color: 0xffffff});
+		this.ms_Plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(1920, 1080), planeMaterial);
+		// plane.position.x = 0;
+		// plane.position.y = 0;
+		// plane.position.z = 0;
+
+		// rotation.z is rotation around the z-axis, measured in radians (rather than degrees)
+		// Math.PI = 180 degrees, Math.PI / 2 = 90 degrees, etc.
+
+		this.ms_Scene.add(this.ms_Plane);
+		this.ms_Plane.rotation.y = Math.PI / 2;
 
 
 		// create a cube
-        var cubeGeometry = new THREE.BoxGeometry(8, 8, 200);
+        var cubeGeometry = new THREE.BoxGeometry(1920, 1080, 2);
         var cubeMaterial = new THREE.MeshPhongMaterial({color: 'red'});
         this.ms_Canoa = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
@@ -135,26 +153,26 @@ var DEMO = {
 	update: function update() {
 		this.ms_Time += 0.007;
 		
-		var q=computeOrientationQuaternion(); //w,x,y,z
-		var quot = new THREE.Quaternion(); 
-		quot.set(q.x,q.y,q.z,q.w);//x,y,z,w
+		// var q=computeOrientationQuaternion(); //w,x,y,z
+		// var quot = new THREE.Quaternion(); 
+		// quot.set(q.x,q.y,q.z,q.w);//x,y,z,w
 
-		this.ms_Canoa.setRotationFromQuaternion(quot);
+		// this.ms_Canoa.setRotationFromQuaternion(quot);
 
-		if (this.ms_Canoa.rotation.x > refX) {
-			distX = (this.ms_Canoa.rotation.x - refX) * 50;
-			console.log(this.ms_Canoa.position.z);
-		}
-		else distX = 0;
-		refX = this.ms_Canoa.rotation.x;
-
-
-
-		this.ms_Canoa.position.z = this.ms_Canoa.position.z + distX;
-
-		this.ms_Camera.position.z = this.ms_Canoa.position.z;
+		// if (this.ms_Canoa.rotation.x > refX) {
+		// 	distX = (this.ms_Canoa.rotation.x - refX) * 50;
+		// 	console.log(this.ms_Canoa.position.z);
+		// }
+		// else distX = 0;
+		// refX = this.ms_Canoa.rotation.x;
 
 
+
+		// this.ms_Canoa.position.z = this.ms_Canoa.position.z + distX;
+
+		// this.ms_Camera.position.z = this.ms_Canoa.position.z;
+
+		this.ms_Plane.rotation.z += 1;
 
 
 		this.display();
