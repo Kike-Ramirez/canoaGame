@@ -198,6 +198,7 @@
 
     function computeQuaternionFromEulers(alpha, beta, gamma) {
 
+        var degtorad = Math.PI / 180;
         var _x = beta * degtorad ; // beta value
         var _y = gamma * degtorad ; // gamma value
         var _z = alpha * degtorad ; // alpha value
