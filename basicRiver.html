@@ -167,7 +167,34 @@
         this.scene.add(this.canoa);
       };
 
-      this.computeQuaternionFromEulers = function(alpha, beta, gamma) {
+      this.updateCanoa = function() {
+
+        if (this.jugador == 0) {
+            this.canoa.position.x = -200;
+
+            this.socket.on('acc0', function(msg){
+                var acc =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
+                
+            });
+
+        }
+        else if (this.jugador == 1) {
+            this.canoa.position.x = 200;
+            this.socket.on('acc1', function(msg){
+                var acc =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
+            });        
+        }
+
+        // Move canoa
+        this.gyro=computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
+        console.log(this.gyro);
+
+      }
+
+
+    }
+
+    function computeQuaternionFromEulers(alpha, beta, gamma) {
 
         var _x = beta * degtorad ; // beta value
         var _y = gamma * degtorad ; // gamma value
@@ -193,40 +220,6 @@
         return {"x":x,"y":y,"z":z,"w":w};//return a simple object with the four quaternion values
 
       }
-
-      this.updateCanoa = function() {
-
-        if (this.jugador == 0) {
-            this.canoa.position.x = -200;
-
-            this.socket.on('acc0', function(msg){
-                var acc =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
-                console.log(acc);
-                this.gyro=this.computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
-            });
-
-        }
-        else if (this.jugador == 1) {
-            this.canoa.position.x = 200;
-            this.socket.on('acc1', function(msg){
-                var acc =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
-                this.gyro=this.computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
-            });        
-        }
-
-        // Move canoa
-        
-      }
-
-
-    }
-
-
-    function initRiver() {
-
-
-
-    }
 
     // calls the init function when the window is done loading.
     window.onload = init;
