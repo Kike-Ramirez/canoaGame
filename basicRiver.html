@@ -162,6 +162,11 @@
 
         this.socket = io();
 
+        // add the cube to the scene
+        this.scene.add(this.canoa);
+      };
+
+      this.updateCanoa = function() {
 
         if (this.jugador == 0) {
             this.canoa.position.x = -200;
@@ -179,12 +184,6 @@
                 this.gyro=this.computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
             });        
         }
-
-        // add the cube to the scene
-        this.scene.add(this.canoa);
-      };
-
-      this.updateCanoa = function() {
 
         // Move canoa
         console.log(this.gyro);
