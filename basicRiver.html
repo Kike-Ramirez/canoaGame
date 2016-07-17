@@ -202,7 +202,7 @@
             this.socket.on('acc0', function(msg){
                 var acc =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 console.log(acc);
-                this.gyro=computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
+                this.gyro=this.computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
             });
 
         }
@@ -210,7 +210,7 @@
             this.canoa.position.x = 200;
             this.socket.on('acc1', function(msg){
                 var acc =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
-                this.gyro=computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
+                this.gyro=this.computeQuaternionFromEulers(acc[0], acc[1], acc[2]);
             });        
         }
 
