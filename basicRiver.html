@@ -23,6 +23,7 @@
     var river;
     var canoa0, canoa1;
     var gyro;
+    var speedX;
 
     /**
      * Initializes the scene, camera and objects. Called when the window is
@@ -144,6 +145,7 @@
       this.texture = undefined;
 
       var refX = 0;
+      speedX = 0;
 
       this.initCanoa =  function() {
         var canoaGeometry = new THREE.BoxGeometry(360, 512, 1);
@@ -221,12 +223,14 @@
 
         if (this.remo.rotation.x < refX) {
             distX = (refX - this.remo.rotation.x) * 20;
+            if (distX > speedX) speedX = distX;
         }
         else distX = 0;
         refX = this.remo.rotation.x;
         
-        this.canoa.position.y = this.canoa.position.y + distX;
+        this.canoa.position.y = this.canoa.position.y + speedX;
         camera.position.y = this.canoa.position.y;
+        speedX -=1;
 
       }
 
