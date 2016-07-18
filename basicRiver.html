@@ -179,9 +179,9 @@
         var acc1 = undefined;
 
         if (this.jugador == 0) {
-            var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial0);
+            canoa0 = new THREE.Mesh(canoaGeometry, canoaMaterial0);
             remo0 = new THREE.Mesh(remoGeometry, remoMaterial);
-            this.canoa = canoa;
+            this.canoa = canoa0;
             this.remo = remo0;
             this.speed =  new THREE.Vector3( 0, 0, 0 );
             gyro0 = new THREE.Vector4( 0, 0, 0, 0 );
@@ -202,9 +202,9 @@
 
         }
         else if (this.jugador == 1) {
-            var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial1);
+            canoa1 = new THREE.Mesh(canoaGeometry, canoaMaterial1);
             remo1 = new THREE.Mesh(remoGeometry, remoMaterial);
-            this.canoa = canoa;
+            this.canoa = canoa1;
             this.remo = remo1;
             this.speed =  new THREE.Vector3( 0, 0, 0 );
             gyro1 = new THREE.Vector4( 0, 0, 0, 0 );
@@ -245,8 +245,8 @@
 
             refX = this.remo.rotation.x;
             
-            this.canoa.position.y = this.canoa.position.y + speedX;
-            camera.position.y = this.canoa.position.y;
+            canoa0.position.y = canoa0.position.y + speedX;
+            camera.position.y = canoa0.position.y;
             if (speedX > 5) speedX = 5;
             if (speedX > 0) speedX = speedX - 0.03;
             if (speedX < 0) speedX = 0;
@@ -267,8 +267,8 @@
 
             refX = this.remo.rotation.x;
             
-            this.canoa.position.y = this.canoa.position.y + speedX;
-            camera.position.y = this.canoa.position.y;
+            canoa1.position.y = canoa1.position.y + speedX;
+            camera.position.y = canoa1.position.y;
             if (speedX > 5) speedX = 5;
             if (speedX > 0) speedX = speedX - 0.03;
             if (speedX < 0) speedX = 0;
