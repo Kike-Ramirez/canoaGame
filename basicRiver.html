@@ -176,6 +176,7 @@
 
         if (this.jugador == 0) {
             this.canoa.position.x = -200;
+            this.remo.position.x = -200;
             this.socket.on('acc0', function(msg){
                 acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
@@ -187,6 +188,7 @@
         }
         else if (this.jugador == 1) {
             this.canoa.position.x = 200;
+            this.remo.position.x = 200;
             this.socket.on('acc1', function(msg){
                 acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
