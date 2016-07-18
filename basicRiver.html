@@ -141,8 +141,8 @@
 
         this.updateRiver = function() {
 
-            if (Math.abs(this.plane.position.y - canoa0.position.y) > 1080) this.plane.position.y += 2 * 1080;
-            if (Math.abs(this.plane2.position.y - canoa0.position.y) > 1080) this.plane2.position.y += 2 * 1080;
+            if (Math.abs(this.plane.position.y - this.canoa.position.y) > 1080) this.plane.position.y += 2 * 1080;
+            if (Math.abs(this.plane2.position.y - this.canoa.position.y) > 1080) this.plane2.position.y += 2 * 1080;
 
         }
 
@@ -179,7 +179,7 @@
         var acc1 = undefined;
 
         if (this.jugador == 0) {
-            canoa0 = new THREE.Mesh(canoaGeometry, canoaMaterial0);
+            var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial0);
             remo0 = new THREE.Mesh(remoGeometry, remoMaterial);
             this.canoa = canoa0;
             this.remo = remo0;
@@ -202,7 +202,7 @@
 
         }
         else if (this.jugador == 1) {
-            canoa1 = new THREE.Mesh(canoaGeometry, canoaMaterial1);
+            var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial1);
             remo1 = new THREE.Mesh(remoGeometry, remoMaterial);
             this.canoa = canoa1;
             this.remo = remo1;
