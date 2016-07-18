@@ -21,6 +21,7 @@
     var camera;
     var river;
     var canoa0, canoa1;
+    var gyro;
 
     /**
      * Initializes the scene, camera and objects. Called when the window is
@@ -149,8 +150,7 @@
       this.speed = undefined;
       this.socket = undefined;
       this.texture = undefined;
-      this.gyro0 = undefined;
-      this.gyro1 = undefined;
+
       var refX = 0;
 
       this.initCanoa =  function() {
@@ -176,7 +176,7 @@
             this.canoa = canoa;
             this.remo = remo;
             this.speed =  new THREE.Vector3( 0, 0, 0 );
-            this.gyro = new THREE.Vector4( 0, 0, 0, 0 );
+            gyro = new THREE.Vector4( 0, 0, 0, 0 );
 
             this.canoa.castShadow = true;
             // add the cube to the scene
@@ -187,7 +187,7 @@
             this.remo.position.x = -200;
             this.socket.on('acc0', function(msg){
                 acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
-                this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
+                gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
                 //console.log(acc0);
 
             });
@@ -199,7 +199,7 @@
             this.canoa = canoa;
             this.remo = remo;
             this.speed =  new THREE.Vector3( 0, 0, 0 );
-            this.gyro = new THREE.Vector4( 0, 0, 0, 0 );
+            gyro = new THREE.Vector4( 0, 0, 0, 0 );
 
             this.canoa.castShadow = true;
             // add the cube to the scene
@@ -209,7 +209,7 @@
             this.remo.position.x = 200;
             this.socket.on('acc1', function(msg){
             acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
-            this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
+            gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
 
             });        
 
@@ -224,7 +224,7 @@
       this.updateCanoa = function() {
 
         // Move canoa 
-        this.remo.setRotationFromQuaternion(this.gyro);
+        this.remo.setRotationFromQuaternion(gyro);
         console.log(this.remo.rotation.x);
 
         if (this.remo.rotation.x > refX) {
