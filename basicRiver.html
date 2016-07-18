@@ -206,10 +206,10 @@
         this.remo.setRotationFromQuaternion(this.gyro);
         
         if (this.remo.rotation.x > refX) {
-            distX = (this.canoa.rotation.x - refX) * 20;
+            distX = (this.remo.rotation.x - refX) * 20;
         }
         else distX = 0;
-        refX = this.canoa.rotation.x;
+        refX = this.remo.rotation.x;
         
         this.canoa.position.z = this.canoa.position.z + distX;
         console.log(this.canoa.position.z);
