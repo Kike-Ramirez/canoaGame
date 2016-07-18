@@ -156,14 +156,18 @@
 
       this.initCanoa =  function() {
         var canoaGeometry = new THREE.BoxGeometry(100, 200, 6);
+        var remoGeometry = new THREE.BoxGeometry(10, 20, 5);
         var canoaMaterial = new THREE.MeshLambertMaterial({color: 'orange'});
-        var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial);
-        this.remo = new THREE.Mesh(canoaGeometry, canoaMaterial);
-        this.canoa = canoa;
+        var remoGeometry = new THREE.MeshLambertMaterial({color: 'black'});
+        this.canoa = new THREE.Mesh(canoaGeometry, canoaMaterial);
+        this.remo = new THREE.Mesh(remoGeometry, remoMaterial);
         this.speed =  new THREE.Vector3( 0, 0, 0 );
         this.gyro = new THREE.Vector4( 0, 0, 0, 0 );
 
         this.canoa.castShadow = true;
+        // add the cube to the scene
+        this.scene.add(this.canoa);
+        this.scene.add(this.remo);
 
         this.socket = io();
 
@@ -193,8 +197,7 @@
         }
 
 
-        // add the cube to the scene
-        this.scene.add(this.canoa);
+
       };
 
       this.updateCanoa = function() {
