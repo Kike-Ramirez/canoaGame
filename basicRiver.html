@@ -56,7 +56,7 @@
         renderer.setClearColor(0x000000, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMapEnabled = true;
-        
+
         // add the output of the renderer to the html element
         document.body.appendChild(renderer.domElement);
 
@@ -181,8 +181,6 @@
             this.socket.on('acc0', function(msg){
                 acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
-                console.log(this.remo.rotation);
-                this.remo.setRotationFromQuaternion(this.gyro);
                 
             });
 
@@ -193,8 +191,7 @@
             this.socket.on('acc1', function(msg){
                 acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
-                this.remo.setRotationFromQuaternion(this.gyro);
-                //console.log(this.gyro);
+
             });        
 
         }
@@ -206,6 +203,8 @@
       this.updateCanoa = function() {
 
         // Move canoa 
+        this.remo.setRotationFromQuaternion(this.gyro);
+        console.log(this.remo.rotation);
 
         if (this.remo.rotation.x > refX) {
             distX = (this.canoa.rotation.x - refX) * 20;
