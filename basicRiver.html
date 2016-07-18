@@ -146,15 +146,19 @@
       this.jugador = jugador;
       this.scene = scene;
       this.canoa = undefined;
+      this.remo = undefined;
       this.speed = undefined;
       this.socket = undefined;
       this.texture = undefined;
-      this.gyro = undefined;
+      this.gyro0 = undefined;
+      this.gyro1 = undefined;
+      var refX = 0;
 
       this.initCanoa =  function() {
         var canoaGeometry = new THREE.BoxGeometry(100, 200, 6);
         var canoaMaterial = new THREE.MeshLambertMaterial({color: 'orange'});
         var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial);
+        this.remo = new THREE.Mesh(canoaGeometry, canoaMaterial);
         this.canoa = canoa;
         this.speed =  new THREE.Vector3( 0, 0, 0 );
         this.gyro = new THREE.Vector4( 0, 0, 0, 0 );
@@ -171,7 +175,7 @@
             this.socket.on('acc0', function(msg){
                 acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
-                console.log(this.gyro);
+                //console.log(this.gyro0);
                 
             });
 
@@ -181,7 +185,7 @@
             this.socket.on('acc1', function(msg){
                 acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
-                console.log(this.gyro);
+                //console.log(this.gyro1);
             });        
 
         }
@@ -194,7 +198,16 @@
       this.updateCanoa = function() {
 
         // Move canoa 
+        this.remo.setRotationFromQuaternion(this.gyro);
+
+        if (this.remo.rotation.x > refX) {
+            distX = (this.ms_Canoa.rotation.x - refX) * 20;
+        }
+        else distX = 0;
+        refX = this.ms_Canoa.rotation.x;
         
+        this.canoa.position.z = this.canoa.position.z + distX;
+
 
       }
 
