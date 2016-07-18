@@ -22,7 +22,7 @@
     var camera;
     var river;
     var canoa0, canoa1;
-    var gyro;
+    var gyro0, gyro1;
     var speedX;
 
     /**
@@ -183,7 +183,7 @@
             this.canoa = canoa;
             this.remo = remo;
             this.speed =  new THREE.Vector3( 0, 0, 0 );
-            gyro = new THREE.Vector4( 0, 0, 0, 0 );
+            gyro0 = new THREE.Vector4( 0, 0, 0, 0 );
 
             this.canoa.castShadow = true;
             // add the cube to the scene
@@ -194,7 +194,7 @@
             this.remo.position.x = -200;
             this.socket.on('acc0', function(msg){
                 acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
-                gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
+                gyro0 = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
                 //console.log(acc0);
 
             });
@@ -206,7 +206,7 @@
             this.canoa = canoa;
             this.remo = remo;
             this.speed =  new THREE.Vector3( 0, 0, 0 );
-            gyro = new THREE.Vector4( 0, 0, 0, 0 );
+            gyro1 = new THREE.Vector4( 0, 0, 0, 0 );
 
             this.canoa.castShadow = true;
             // add the cube to the scene
@@ -216,7 +216,7 @@
             this.remo.position.x = 200;
             this.socket.on('acc1', function(msg){
                 acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
-                gyro = computeQuaternionFromEulers(acc1[0], acc1[1], acc1[2]);
+                gyro1 = computeQuaternionFromEulers(acc1[0], acc1[1], acc1[2]);
 
             });        
 
@@ -231,7 +231,18 @@
       this.updateCanoa = function() {
 
         // Move canoa 
-        this.remo.setRotationFromQuaternion(gyro);
+        if (this.jugador == 0) {
+
+            this.remo.setRotationFromQuaternion(gyro0);
+
+        }
+        
+        else if (this.jugador == 1) {
+
+            this.remo.setRotationFromQuaternion(gyro1);
+
+        }
+        
         console.log(this.remo.rotation.x);
 
         if (refX - this.remo.rotation.x > 0.05) {
