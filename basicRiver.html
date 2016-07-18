@@ -94,6 +94,8 @@
         this.jugador = jugador;
         this.scene = scene;
         this.texture = undefined;
+        this.plane = undefined;
+        this.plane2 = undefined;
 
         this.initRiver = function() {
 
@@ -121,14 +123,24 @@
             //.rotation.y = Math.PI / 4;
             //plane.rotation.x = Math.PI / 4;
 
+            this.plane = plane;
+            this.plane2 = plane2;
+
             // add the plane to the scene
-            scene.add(plane);
-            scene.add(plane2);
+            scene.add(this.plane);
+            scene.add(this.plane2);
 
             // position and point the camera to the center of the scene
             camera.position.y = 0;
             camera.position.z = 600;
                 
+        }
+
+        this.updateRiver = function() {
+
+            if (this.plane.position.y - canoa0.canoa.position.y > 1080) this.plane.position.y += 1080;
+            if (this.plane2.position.y - canoa0.canoa.position.y > 1080) this.plane2.position.y += 1080;
+
         }
 
     }
