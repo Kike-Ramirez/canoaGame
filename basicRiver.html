@@ -156,7 +156,7 @@
 
       this.initCanoa =  function() {
         var canoaGeometry = new THREE.BoxGeometry(100, 200, 6);
-        var remoGeometry = new THREE.BoxGeometry(10, 20, 5);
+        var remoGeometry = new THREE.BoxGeometry(10, 20, 10);
         var canoaMaterial = new THREE.MeshLambertMaterial({color: 'orange'});
         var remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
         this.canoa = new THREE.Mesh(canoaGeometry, canoaMaterial);
@@ -180,8 +180,8 @@
             this.socket.on('acc0', function(msg){
                 acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
-                this.remo.setRotationFromQuaternion(this.gyro);
                 console.log(this.remo.rotation);
+                this.remo.setRotationFromQuaternion(this.gyro);
                 
             });
 
