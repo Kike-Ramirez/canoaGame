@@ -75,7 +75,6 @@
     function render() {
         // render using requestAnimationFrame
         canoa0.updateCanoa();
-        canoa1.updateCanoa();
         requestAnimationFrame(render);
         renderer.render(scene, camera);
     }
@@ -219,7 +218,7 @@
 
         // Move canoa 
         this.remo.setRotationFromQuaternion(gyro);
-        console.log(this.remo.rotation.x);
+        console.log(speedX);
 
         if (this.remo.rotation.x < refX) {
             distX = (refX - this.remo.rotation.x) * 20;
@@ -228,7 +227,7 @@
         else distX = 0;
 
         if (distX > speedX) speedX = distX;
-        
+
         refX = this.remo.rotation.x;
         
         this.canoa.position.y = this.canoa.position.y + speedX;
