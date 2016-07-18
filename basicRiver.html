@@ -156,21 +156,13 @@
       this.initCanoa =  function() {
         var canoaGeometry = new THREE.BoxGeometry(180, 256, 6);
         var remoGeometry = new THREE.BoxGeometry(10, 20, 10);
-        var canoaTexture = THREE.ImageUtils.loadTexture( "/img/remar__1.png" )
+        var canoaTexture0 = THREE.ImageUtils.loadTexture( "/img/remar__1.png" );
+        var canoaTexture1 = THREE.ImageUtils.loadTexture("/img/1.2.png")
         canoaTexture.minFilter = THREE.NearestFilter;
-        var canoaMaterial = new THREE.MeshLambertMaterial({ map: canoaTexture,  transparent: true });
+        var canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0,  transparent: true });
+        var canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1,  transparent: true });
         var remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
-        var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial);
-        var remo = new THREE.Mesh(remoGeometry, remoMaterial);
-        this.canoa = canoa;
-        this.remo = remo;
-        this.speed =  new THREE.Vector3( 0, 0, 0 );
-        this.gyro = new THREE.Vector4( 0, 0, 0, 0 );
 
-        this.canoa.castShadow = true;
-        // add the cube to the scene
-        this.scene.add(this.canoa);
-        this.scene.add(this.remo);
 
         this.socket = io();
 
@@ -178,6 +170,18 @@
         var acc1 = undefined;
 
         if (this.jugador == 0) {
+            var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial0);
+            var remo = new THREE.Mesh(remoGeometry, remoMaterial);
+            this.canoa = canoa;
+            this.remo = remo;
+            this.speed =  new THREE.Vector3( 0, 0, 0 );
+            this.gyro = new THREE.Vector4( 0, 0, 0, 0 );
+
+            this.canoa.castShadow = true;
+            // add the cube to the scene
+            this.scene.add(this.canoa);
+            this.scene.add(this.remo);
+
             this.canoa.position.x = -200;
             this.remo.position.x = -200;
             this.socket.on('acc0', function(msg){
@@ -189,11 +193,22 @@
 
         }
         else if (this.jugador == 1) {
+            var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial1);
+            var remo = new THREE.Mesh(remoGeometry, remoMaterial);
+            this.canoa = canoa;
+            this.remo = remo;
+            this.speed =  new THREE.Vector3( 0, 0, 0 );
+            this.gyro = new THREE.Vector4( 0, 0, 0, 0 );
+
+            this.canoa.castShadow = true;
+            // add the cube to the scene
+            this.scene.add(this.canoa);
+            this.scene.add(this.remo);
             this.canoa.position.x = 200;
             this.remo.position.x = 200;
             this.socket.on('acc1', function(msg){
-                acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
-                this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
+            acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
+            this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
 
             });        
 
