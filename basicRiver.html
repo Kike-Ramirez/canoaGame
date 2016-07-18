@@ -234,6 +234,21 @@
         if (this.jugador == 0) {
 
             this.remo.setRotationFromQuaternion(gyro0);
+            console.log(this.remo.rotation.x);
+
+            if (refX - this.remo.rotation.x > 0.05) {
+
+                speedX = speedX + 0.2;
+                
+            }
+
+            refX = this.remo.rotation.x;
+            
+            this.canoa.position.y = this.canoa.position.y + speedX;
+            camera.position.y = this.canoa.position.y;
+            if (speedX > 5) speedX = 5;
+            if (speedX > 0) speedX = speedX - 0.03;
+            if (speedX < 0) speedX = 0;
 
         }
         
@@ -241,23 +256,25 @@
 
             this.remo.setRotationFromQuaternion(gyro1);
 
-        }
-        
-        console.log(this.remo.rotation.x);
+            console.log(this.remo.rotation.x);
 
-        if (refX - this.remo.rotation.x > 0.05) {
+            if (refX - this.remo.rotation.x > 0.05) {
 
-            speedX = speedX + 0.2;
+                speedX = speedX + 0.2;
+                
+            }
+
+            refX = this.remo.rotation.x;
             
+            this.canoa.position.y = this.canoa.position.y + speedX;
+            camera.position.y = this.canoa.position.y;
+            if (speedX > 5) speedX = 5;
+            if (speedX > 0) speedX = speedX - 0.03;
+            if (speedX < 0) speedX = 0;
+
         }
 
-        refX = this.remo.rotation.x;
-        
-        this.canoa.position.y = this.canoa.position.y + speedX;
-        camera.position.y = this.canoa.position.y;
-        if (speedX > 5) speedX = 5;
-        if (speedX > 0) speedX = speedX - 0.03;
-        if (speedX < 0) speedX = 0;
+
 
       }
 
