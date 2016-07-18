@@ -232,8 +232,9 @@
         this.remo.setRotationFromQuaternion(gyro);
         console.log(speedX);
 
-        if (this.remo.rotation.x < refX) {
-            speedX = speedX + 0.1;
+        if (this.remo.rotation.x > refX) {
+            
+            speedX = speedX + 0.2;
             
         }
 
