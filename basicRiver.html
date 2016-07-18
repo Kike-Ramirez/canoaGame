@@ -201,10 +201,10 @@
         this.remo.setRotationFromQuaternion(this.gyro);
 
         if (this.remo.rotation.x > refX) {
-            distX = (this.ms_Canoa.rotation.x - refX) * 20;
+            distX = (this.canoa.rotation.x - refX) * 20;
         }
         else distX = 0;
-        refX = this.ms_Canoa.rotation.x;
+        refX = this.canoa.rotation.x;
         
         this.canoa.position.z = this.canoa.position.z + distX;
 
