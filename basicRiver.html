@@ -233,7 +233,7 @@
         this.canoa.position.y = this.canoa.position.y + speedX;
         camera.position.y = this.canoa.position.y;
         if (speedX > 0) speedX = speedX - 5;
-        else speedX = 0;
+        if (speedX < 0) speedX = 0;
 
       }
 
