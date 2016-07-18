@@ -181,6 +181,7 @@
             this.socket.on('acc0', function(msg){
                 acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
                 this.gyro = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
+                console.log(acc0);
                 
             });
 
@@ -196,7 +197,7 @@
 
         }
 
-        console.log(acc0);
+        
 
 
 
