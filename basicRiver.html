@@ -158,7 +158,8 @@
         var remoGeometry = new THREE.BoxGeometry(10, 20, 10);
         var canoaTexture0 = THREE.ImageUtils.loadTexture( "/img/remar__1.png" );
         var canoaTexture1 = THREE.ImageUtils.loadTexture("/img/1.2.png")
-        canoaTexture.minFilter = THREE.NearestFilter;
+        canoaTexture0.minFilter = THREE.NearestFilter;
+        canoaTexture1.minFilter = THREE.NearestFilter;
         var canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0,  transparent: true });
         var canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1,  transparent: true });
         var remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
