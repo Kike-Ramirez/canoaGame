@@ -156,7 +156,9 @@
       this.initCanoa =  function() {
         var canoaGeometry = new THREE.BoxGeometry(100, 200, 6);
         var remoGeometry = new THREE.BoxGeometry(10, 20, 10);
-        var canoaMaterial = new THREE.MeshLambertMaterial({color: 'orange'});
+        var canoaTexture = THREE.ImageUtils.loadTexture( "/img/remar_01.png" )
+        //canoaTexture.minFilter = THREE.NearestFilter;
+        var canoaMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, map: planeTexture });
         var remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
         var canoa = new THREE.Mesh(canoaGeometry, canoaMaterial);
         var remo = new THREE.Mesh(remoGeometry, remoMaterial);
@@ -208,7 +210,7 @@
         // Move canoa 
         this.remo.setRotationFromQuaternion(this.gyro);
         console.log(this.remo.rotation.x);
-        
+
         if (this.remo.rotation.x > refX) {
             distX = (this.remo.rotation.x - refX) * 20;
         }
