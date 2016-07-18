@@ -127,15 +127,6 @@
             // position and point the camera to the center of the scene
             camera.position.y = 0;
             camera.position.z = 600;
-
-            if (this.jugador == 0) {
-                camera.position.x = -200;
-                camera.lookAt(canoa0.canoa.position);
-            }
-            else if (this.jugador == 1) {
-                camera.position.x = 200;
-                camera.lookAt(canoa1.canoa.position);
-            }
                 
         }
 
@@ -234,6 +225,7 @@
         refX = this.remo.rotation.x;
         
         this.canoa.position.y = this.canoa.position.y + distX;
+        camera.position.y = this.canoa.position.y;
 
       }
 
