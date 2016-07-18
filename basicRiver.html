@@ -158,7 +158,7 @@
         var canoaGeometry = new THREE.BoxGeometry(100, 200, 6);
         var remoGeometry = new THREE.BoxGeometry(10, 20, 5);
         var canoaMaterial = new THREE.MeshLambertMaterial({color: 'orange'});
-        var remoGeometry = new THREE.MeshLambertMaterial({color: 'black'});
+        var remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
         this.canoa = new THREE.Mesh(canoaGeometry, canoaMaterial);
         this.remo = new THREE.Mesh(remoGeometry, remoMaterial);
         this.speed =  new THREE.Vector3( 0, 0, 0 );
