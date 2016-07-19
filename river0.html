@@ -25,6 +25,7 @@
     var planeGeometry, planeTexture, planeMaterial;
     var canoa0, canoa1;
     var flechaUP, flechaDOWN, flechaGeometry, flechaTexture, flechaMaterial;
+    var meta, megaGeometry, metaTexture, metaMaterial;
     var remando0, remando1;
     var canoaGeometry, canoaTexture0, canoaTexture1, canoaMaterial0, canoaMaterial1;
     var remoGeometry, remoMaterial;
@@ -118,7 +119,7 @@
 
         // create the ground plane
         planeGeometry = new THREE.PlaneGeometry(1920, 1080);
-        planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" )
+        planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" );
         planeTexture.minFilter = THREE.NearestFilter;
         planeMaterial = new THREE.MeshLambertMaterial({color: 'white', map: planeTexture });
         plane0 = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -139,6 +140,18 @@
         // add the plane to the scene
         scene.add(plane0);
         scene.add(plane1);
+
+        // Create the meta
+        metaGeometry = new THREE.PlaneGeometry(1704,400);
+        metaTexture = THREE.ImageUtils.loadTexture( "/img/meta.png" );
+        metaTexture.minFilter = THREE.NearestFilter;
+        metaMaterial = new THREE.MeshLambertMaterial({color: white, map: metaTexture});
+        meta = new THREE.Mesh(metaGeometry, metaMaterial);
+        meta.position.x = 0;
+        meta.position.y = 0;
+        meta.position.z = 10;
+        scene.add(meta);
+        
                 
     }
 
