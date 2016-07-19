@@ -162,7 +162,7 @@
 
         }
 
-        var rockNumber = 200;
+        var rockNumber = 80;
 
         for (var i = 0; i < rockNumber; i++) {
 
@@ -175,7 +175,7 @@
             else rocks[i].position.x = Math.round(400 + 100 * Math.random());
 
 
-            rocks[i].position.y = i * Math.floor(-100 + 11000 * Math.random());
+            rocks[i].position.y = 10000 / rockNumber * (i + Math.random());
 
             rocks[i].position.z = 20;
 
