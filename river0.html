@@ -205,7 +205,6 @@
         socket.on('acc0', function(msg){
             acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro0 = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
-            remando0 = true;
 
         });
 
@@ -229,7 +228,6 @@
         socket.on('acc1', function(msg){
             acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro1 = computeQuaternionFromEulers(acc1[0], acc1[1], acc1[2]);
-            remando1 = true;
 
         });        
 
@@ -246,7 +244,8 @@
         if (refX0- remo0.rotation.x > 0.05) {
 
             speedX0 = speedX0 + 0.2;
-                
+            remando0 = true;
+
         }
 
         refX0 = remo0.rotation.x;
@@ -280,6 +279,7 @@
         if (refX1- remo1.rotation.x > 0.05) {
 
             speedX1 = speedX1 + 0.2;
+            remando1 = true;
                 
         }
 
