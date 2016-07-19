@@ -99,21 +99,15 @@
 
         // rotate and position the plane
         //plane.rotation.x = -0.0 * Math.PI20
-        plane0.position.x = 0;
-        plane0.position.y = 0;
-        plane0.position.z = 0;
-
-        plane1.position.x = 0;
-        plane1.position.y = 1080;
-        plane1.position.z = 0;
+        plane0.position = new THREE.Vector3( 0, 0, 0 );
+        plane1.position = new THREE.Vector3( 0, 0, 0 );
 
         // add the plane to the scene
         scene.add(plane0);
         scene.add(plane1);
 
         // position and point the camera to the center of the scene
-        camera.position.y = 0;
-        camera.position.z = 600;
+        camera.position = new THREE.Vector3( 0, 600, 0);
                 
     }
 
@@ -146,8 +140,8 @@
         canoa0.castShadow = false;
         scene.add(canoa0);
         scene.add(remo0);
-        canoa0.position = new THREE.Vector3( -200, 0, 0);
-        remo0.position = new THREE.Vector3( -200, 0, 0);
+        canoa0.position = new THREE.Vector3( -200, 0, 0 );
+        remo0.position = new THREE.Vector3( -200, 0, 0 );
         socket.on('acc0', function(msg){
             acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro0 = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
@@ -162,8 +156,8 @@
         canoa1.castShadow = false;
         scene.add(canoa1);
         scene.add(remo1);
-        canoa1.position.x = 200;
-        remo1.position.x = 200;
+        canoa1.position = new THREE.Vector3( 200, 0, 0 );
+        remo1.position = new THREE.Vector3( 200, 0, 0 );
         socket.on('acc1', function(msg){
             acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro1 = computeQuaternionFromEulers(acc1[0], acc1[1], acc1[2]);
