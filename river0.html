@@ -89,7 +89,7 @@
         text.style.width = 100;
         text.style.height = 100;
         text.style.backgroundColor = "transparent";
-        text.innerHTML = "Distancia a Meta: " + (meta.position.y - canoa0.position.y).toString() + "<br> Distancia a oponente: " + (Math.abs(canoa0.position.y - canoa1.position.y)).toString();
+        text.innerHTML = "Distancia a Meta: " + (Math.floor(meta.position.y - canoa0.position.y)).toString() + "<br> Distancia a oponente: " + (Math.floor(canoa0.position.y - canoa1.position.y)).toString();
         text.style.top = 20 + 'px';
         text.style.left = 20 + 'px';
         document.body.appendChild(text);
