@@ -37,6 +37,7 @@
     var socket;
     var rocks, rockGeometry, rockMaterial, rockTextures;
     var indice0, indice1;
+    var text;
 
     /**
      * Initializes the scene, camera and objects. Called when the window is
@@ -80,6 +81,18 @@
 
         initRiver();
         initCanoas();
+
+        // Textos en pantalla
+        var text = document.createElement('div');
+        text.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text.style.width = 100;
+        text.style.height = 100;
+        text.style.backgroundColor = "transparent";
+        text.innerHTML = "Distancia a Meta: " + (meta.position.y - canoa0.position.y).toString() + "<br> Distancia a oponente: " + (Math.abs(canoa0.position.y - canoa1.position.y)).toString();
+        text.style.top = 20 + 'px';
+        text.style.left = 20 + 'px';
+        document.body.appendChild(text);
 
         // add the output of the renderer to the html element
         document.body.appendChild(renderer.domElement);
@@ -182,6 +195,8 @@
             scene.add(rocks[i]);
 
         }
+
+        //socket.emit('rocks', rocks);
 
 
                 
@@ -429,6 +444,11 @@
     window.onload = init;
     // calls the handleResize function when the window is resized
     window.addEventListener('resize', handleResize, false);
+
+    //add event listener
+    window.addEventListener('click', function(event) {
+        console.log("click");
+    });
 
 </script>
 <body>
