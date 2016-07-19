@@ -171,10 +171,8 @@
 
     function updateCanoas() {
 
-        console.log("Previo a quaternion");
         // Calculamos el avance de la canoa 0
         remo0.setRotationFromQuaternion(gyro0);
-        console.log("Posterior a quaternion");
 
         if (refX0- remo0.rotation.x > 0.05) {
 
