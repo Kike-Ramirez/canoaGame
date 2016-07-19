@@ -24,7 +24,7 @@
     var plane0, plane1;
     var planeGeometry, planeTexture, planeMaterial;
     var canoa0, canoa1;
-    var flecha, flechaGeometry, flechaTexture, flechaMaterial;
+    var flechaUP, flechaDOWN, flechaGeometry, flechaTexture, flechaMaterial;
     var remando0, remando1;
     var canoaGeometry, canoaTexture0, canoaTexture1, canoaMaterial0, canoaMaterial1;
     var remoGeometry, remoMaterial;
@@ -194,7 +194,9 @@
         // Creamos la canoa del jugador 0
         canoa0 = new THREE.Mesh(canoaGeometry, canoaMaterial0);
         remo0 = new THREE.Mesh(remoGeometry, remoMaterial);
-        flecha = new THREE.Mesh(flechaGeometry, flechaMaterial);
+        flechaUP = new THREE.Mesh(flechaGeometry, flechaMaterial);
+        flechaDOWN = new THREE.Mesh(flechaGeometry, flechaMaterial);
+
 
         canoa0.castShadow = true;
 
@@ -231,13 +233,19 @@
 
         // Creamos la flecha
 
-        flecha.position.x = 200;
-        flecha.position.y = -800;
-        flecha.position.z = -50;
+        flechaUP.position.x = 200;
+        flechaUP.position.y = -800;
+        flechaUP.position.z = -50;
+
+        flechaDOWN.position.x = 200;
+        flechaDOWN.position.y = -800;
+        flechaDOWN.position.z = -50;
+        flechaUP.rotation.z = Math.PI;
 
         scene.add(canoa1);
         scene.add(remo1);
-        scene.add(flecha);
+        scene.add(flechaUP);
+        scene.add(flechDOWN);
 
         socket.on('acc1', function(msg){
             acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
@@ -324,21 +332,25 @@
         
         console.log(canoa0.position.y - canoa1.position.y);
 
-        if (canoa0.position.y - canoa1.position.y > 400) {
+        if (canoa0.position.y - canoa1.position.y > 450) {
 
-            flecha.position.y = canoa0.position.y - 180;
-            flecha.position.z = 50;
+            flechaDOWN.position.y = canoa0.position.y - 180;
+            flechaDOWN.position.z = 50;
 
         }
 
-        // else if (canoa0.position.y - canoa1.position.y > 500) {
+        else if (canoa0.position.y - canoa1.position.y > 500) {
 
-        //     flecha.position.y = canoa0.position.y + 400;
-        //     flecha.position.z = 50; 
+             flechaUP.position.y = canoa0.position.y + 400;
+             flechaUP.position.z = 50; 
 
-        // }
+         }
 
-        else flecha.position.z = -10;
+        else {
+            
+            flechaUP.position.z = -10;
+            flechDOWN.position.z = -10;
+        }
 
     }
 
