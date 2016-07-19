@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic River</title>
+    <title>canoaGame by espadaysantacruz SC</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <script src="/libs/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
@@ -20,8 +20,12 @@
     var renderer;
     var scene;
     var camera;
+    var ambientLight;
     var plane0, plane1;
+    var planeGeometry, planeTexture, planeMaterial;
     var canoa0, canoa1;
+    var canoaGeometry, canoaTexture0, canoaTexture1, canoaMaterial0, canoaMaterial1;
+    var remoGeometry, remoMaterial;
     var gyro0, gyro1;
     var acc0, acc1;
     var remo0, remo1;
@@ -39,12 +43,13 @@
         scene = new THREE.Scene();
 
         // create a camera, which defines where we're looking at.
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 4500);
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+        // position and point the camera to the center of the scene
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 600;
 
-        initRiver();
-        initCanoas();
-
-        var ambientLight = new THREE.AmbientLight(0xffffff);
+        ambientLight = new THREE.AmbientLight(0xffffff);
         scene.add(ambientLight);
 
         // create a render, sets the background color and the size
@@ -52,6 +57,21 @@
         renderer.setClearColor(0x000000, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMapEnabled = true;
+
+        gyro0 = 0;
+        gyro1 = 0;
+
+        acc0 = 0;
+        acc1 = 0;
+
+        speedX0 = 0;
+        speedX1 = 0;
+
+        refX0 = 0;
+        refX1 = 0;
+
+        initRiver();
+        initCanoas();
 
         // add the output of the renderer to the html element
         document.body.appendChild(renderer.domElement);
@@ -69,7 +89,6 @@
         // render using requestAnimationFrame
         updateRiver();
         updateCanoas();
-
         requestAnimationFrame(render);
         renderer.render(scene, camera);
     }
@@ -88,27 +107,31 @@
 
     function initRiver() {
 
+        console.log("Rio inicializado")
+
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(1920, 1080);
-        var planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" )
+        planeGeometry = new THREE.PlaneGeometry(1920, 1080);
+        planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" )
         planeTexture.minFilter = THREE.NearestFilter;
-        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, map: planeTexture });
+        planeMaterial = new THREE.MeshLambertMaterial({color: 'white', map: planeTexture });
         plane0 = new THREE.Mesh(planeGeometry, planeMaterial);
         plane1 = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane0.receiveShadow = false;
-        plane1.receiveShadow = false;
+        plane0.receiveShadow = true;
+        plane1.receiveShadow = true;
 
         // rotate and position the plane
         //plane.rotation.x = -0.0 * Math.PI20
-        plane0.position = new THREE.Vector3( 0, 0, 0 );
-        plane1.position = new THREE.Vector3( 0, 0, 0 );
+        plane0.position.x = 0;
+        plane0.position.y = 0;
+        plane0.position.z = 0;
+
+        plane1.position.x = 0; 
+        plane1.position.y = 1080; 
+        plane1.position.z = 0; 
 
         // add the plane to the scene
         scene.add(plane0);
         scene.add(plane1);
-
-        // position and point the camera to the center of the scene
-        camera.position = new THREE.Vector3( 0, 600, 0);
                 
     }
 
@@ -121,15 +144,18 @@
 
 
     function initCanoas() {
-        var canoaGeometry = new THREE.BoxGeometry(360, 512, 1);
-        var remoGeometry = new THREE.BoxGeometry(10, 20, 10);
-        var canoaTexture0 = THREE.ImageUtils.loadTexture( "/img/1_1.png" );
-        var canoaTexture1 = THREE.ImageUtils.loadTexture("/img/2_1.png")
+
+        console.log("Canoas inicializadas")
+
+        canoaGeometry = new THREE.BoxGeometry(360, 512, 1);
+        remoGeometry = new THREE.BoxGeometry(10, 20, 10);
+        canoaTexture0 = THREE.ImageUtils.loadTexture( "/img/1_1.png" );
+        canoaTexture1 = THREE.ImageUtils.loadTexture("/img/2_1.png")
         canoaTexture0.minFilter = THREE.NearestFilter;
         canoaTexture1.minFilter = THREE.NearestFilter;
-        var canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0,  transparent: true });
-        var canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1,  transparent: true });
-        var remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
+        canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0,  transparent: true });
+        canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1,  transparent: true });
+        remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
 
 
         socket = io();
@@ -137,13 +163,20 @@
         // Creamos la canoa del jugador 0
         canoa0 = new THREE.Mesh(canoaGeometry, canoaMaterial0);
         remo0 = new THREE.Mesh(remoGeometry, remoMaterial);
-        gyro0 = new THREE.Vector4( 0, 0, 0, 0 );
 
-        canoa0.castShadow = false;
+        canoa0.castShadow = true;
+
+        canoa0.position.x = -200; 
+        canoa0.position.y = 0;
+        canoa0.position.z = 0;
+   
+        remo0.position.x = -200;
+        remo0.position.y = 0;        
+        remo0.position.z = 0;
+
         scene.add(canoa0);
         scene.add(remo0);
-        canoa0.position = new THREE.Vector3( -200, 0, 0 );
-        remo0.position = new THREE.Vector3( -200, 0, 0 );
+
         socket.on('acc0', function(msg){
             acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro0 = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
@@ -153,13 +186,20 @@
         // Creamos la canoa del jugador 1
         canoa1 = new THREE.Mesh(canoaGeometry, canoaMaterial1);
         remo1 = new THREE.Mesh(remoGeometry, remoMaterial);
-        gyro1 = new THREE.Vector4( 0, 0, 0, 0 );
 
-        canoa1.castShadow = false;
+        canoa1.castShadow = true;
+
+        canoa1.position.x = 200;
+        canoa1.position.y = 0;
+        canoa1.position.z = 0; 
+
+        remo1.position.x = -200;
+        remo1.position.y = 0;        
+        remo1.position.z = 0;
+
         scene.add(canoa1);
         scene.add(remo1);
-        canoa1.position = new THREE.Vector3( 200, 0, 0 );
-        remo1.position = new THREE.Vector3( 200, 0, 0 );
+
         socket.on('acc1', function(msg){
             acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro1 = computeQuaternionFromEulers(acc1[0], acc1[1], acc1[2]);
@@ -180,7 +220,7 @@
                 
         }
 
-        refX0= remo0.rotation.x;
+        refX0 = remo0.rotation.x;
             
         canoa0.position.y = canoa0.position.y + speedX0;
         if (speedX0 > 5) speedX0 = 5;
