@@ -24,6 +24,7 @@
     var plane0, plane1;
     var planeGeometry, planeTexture, planeMaterial;
     var canoa0, canoa1;
+    var remando0, remando1;
     var canoaGeometry, canoaTexture0, canoaTexture1, canoaMaterial0, canoaMaterial1;
     var remoGeometry, remoMaterial;
     var gyro0, gyro1;
@@ -33,6 +34,7 @@
     var refX0, refX1;
     var socket;
     var rockPositions, rockTextures;
+    var indice0, indice1;
 
     /**
      * Initializes the scene, camera and objects. Called when the window is
@@ -70,6 +72,9 @@
 
         refX0 = 0;
         refX1 = 0;
+
+        remando0 = false;
+        remando1 = false;
 
         initRiver();
         initCanoas();
@@ -162,10 +167,10 @@
         canoaTexture0 = {};
         canoaTexture1 = {};
 
-        for (int i = 0; i < 10; i++) {
+        for (var i = 0; i < 10; i++) {
 
-            String name0 = "/img/1_" + str(i+1) + ".png";
-            String name1 = "/img/2_" + str(i+1) + ".png";
+            var name0 = "/img/1_" + (i+1).toString() + ".png";
+            var name1 = "/img/2_" + (i+1).toString() + ".png";
 
             canoaTexture0[i] = THREE.ImageUtils.loadTexture( name0 );
             canoaTexture1[i] = THREE.ImageUtils.loadTexture( name1 );
@@ -200,6 +205,7 @@
         socket.on('acc0', function(msg){
             acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro0 = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
+            remando0 = true;
 
         });
 
@@ -223,9 +229,12 @@
         socket.on('acc1', function(msg){
             acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro1 = computeQuaternionFromEulers(acc1[0], acc1[1], acc1[2]);
+            remando1 = true;
 
         });        
 
+        indice0 = 0;
+        indice1 = 0;
 
     }
 
@@ -247,6 +256,23 @@
         if (speedX0 > 0) speedX0 = speedX0 - 0.03;
         if (speedX0 < 0) speedX0 = 0;
 
+        if (remando0) {
+            
+            indice0 = indice0 + 1;
+
+            if (indice0 == 30) {
+                indice0 = 0;
+                remando0 = false;
+            }
+
+            canoa0.material.map = canoaTexture0[Math.floor(indice0/3)];
+            canoa0.material.needsUpdate = true;
+
+        }
+
+        else indice = 0;
+
+
         // Calculamos el avance de la canoa 1
         remo1.setRotationFromQuaternion(gyro1);
 
@@ -264,6 +290,20 @@
         if (speedX1 > 0) speedX1 = speedX1 - 0.03;
         if (speedX1 < 0) speedX1 = 0;
 
+        if (remando1) {
+            
+            indice1 = indice1 + 1;
+
+            if (indice1 == 30) {
+                indice1 = 0;
+                remando1 = false;
+            }
+            canoa1.material.map = canoaTexture1[Math.floor(indice1/3)];
+            canoa1.material.needsUpdate = true;
+
+        }
+
+        else indice1 = 0;
 
         // Calculamos el avance de la cámara
         camera.position.y = canoa0.position.y;
