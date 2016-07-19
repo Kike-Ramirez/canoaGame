@@ -24,6 +24,7 @@
     var plane0, plane1;
     var planeGeometry, planeTexture, planeMaterial;
     var canoa0, canoa1;
+    var flecha, flechaGeometry, flechaTexture, flechaMaterial;
     var remando0, remando1;
     var canoaGeometry, canoaTexture0, canoaTexture1, canoaMaterial0, canoaMaterial1;
     var remoGeometry, remoMaterial;
@@ -164,6 +165,8 @@
 
         canoaGeometry = new THREE.BoxGeometry(360, 512, 1);
         remoGeometry = new THREE.BoxGeometry(10, 20, 10);
+        flechaGeometry = new THREE.BoxGeometry(350, 250, 1);
+
         canoaTexture0 = {};
         canoaTexture1 = {};
 
@@ -181,6 +184,9 @@
         canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0[0],  transparent: true });
         canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1[0],  transparent: true });
         remoMaterial = new THREE.MeshLambertMaterial({color: 'black', transparent: true});
+        
+        flechaTexture = THREE.ImageUtils.loadTexture( "/img/flecha.png" );
+        flechaMaterial = new THREE.MeshLambertMaterial({ map: flechaTexture, transparent: true });
 
 
         socket = io();
@@ -188,6 +194,7 @@
         // Creamos la canoa del jugador 0
         canoa0 = new THREE.Mesh(canoaGeometry, canoaMaterial0);
         remo0 = new THREE.Mesh(remoGeometry, remoMaterial);
+        flecha = new THREE.Mesh(flechaGeometry, flechaMaterial);
 
         canoa0.castShadow = true;
 
@@ -222,8 +229,15 @@
         remo1.position.y = 0;        
         remo1.position.z = -50;
 
+        // Creamos la flecha
+
+        flecha.position.x = 200;
+        flecha.position.y = -200;
+        flecha.position.z = -50;
+
         scene.add(canoa1);
         scene.add(remo1);
+        scene.add(flecha);
 
         socket.on('acc1', function(msg){
             acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
@@ -307,6 +321,21 @@
 
         // Calculamos el avance de la cámara
         camera.position.y = canoa0.position.y + 100;
+        if (canoa1.position.y - canoa0.position.y > 1080) {
+
+            flecha.position.y = canoa0.position.y -200;
+            flecha.position.z = 50;
+
+        }
+
+        else if (canoa0.position.y - canoa1.position.y > 1080) {
+
+            flecha.position.y = canoa0.position.y + 100;
+            flecha.position.z = 50; 
+
+        }
+
+        else flecha.position.z = -10;
 
     }
 
