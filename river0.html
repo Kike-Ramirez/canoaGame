@@ -180,7 +180,7 @@
         canoaTexture1.minFilter = THREE.NearestFilter;
         canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0[0],  transparent: true });
         canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1[0],  transparent: true });
-        remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
+        remoMaterial = new THREE.MeshLambertMaterial({color: 'black', transparent: true});
 
 
         socket = io();
@@ -192,7 +192,7 @@
         canoa0.castShadow = true;
 
         canoa0.position.x = -200; 
-        canoa0.position.y = 0;
+        canoa0.position.y = -100;
         canoa0.position.z = 0;
    
         remo0.position.x = -200;
@@ -215,12 +215,12 @@
         canoa1.castShadow = true;
 
         canoa1.position.x = 200;
-        canoa1.position.y = 0;
-        canoa1.position.z = 0; 
+        canoa1.position.y = -100;
+        canoa1.position.z = -50; 
 
-        remo1.position.x = -200;
+        remo1.position.x = 200;
         remo1.position.y = 0;        
-        remo1.position.z = 0;
+        remo1.position.z = -50;
 
         scene.add(canoa1);
         scene.add(remo1);
