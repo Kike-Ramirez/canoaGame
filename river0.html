@@ -69,6 +69,7 @@
         // render using requestAnimationFrame
         updateRiver();
         updateCanoas();
+
         requestAnimationFrame(render);
         renderer.render(scene, camera);
     }
@@ -136,6 +137,7 @@
         // Creamos la canoa del jugador 0
         canoa0 = new THREE.Mesh(canoaGeometry, canoaMaterial0);
         remo0 = new THREE.Mesh(remoGeometry, remoMaterial);
+        gyro0 = new THREE.Vector4( 0, 0, 0, 0 );
 
         canoa0.castShadow = false;
         scene.add(canoa0);
@@ -181,9 +183,9 @@
         refX0= remo0.rotation.x;
             
         canoa0.position.y = canoa0.position.y + speedX0;
-        if (speedX > 5) speedX = 5;
-        if (speedX > 0) speedX = speedX - 0.03;
-        if (speedX < 0) speedX = 0;
+        if (speedX0 > 5) speedX0 = 5;
+        if (speedX0 > 0) speedX0 = speedX0 - 0.03;
+        if (speedX0 < 0) speedX0 = 0;
 
         // Calculamos el avance de la canoa 1
         remo1.setRotationFromQuaternion(gyro1);
@@ -197,10 +199,10 @@
 
         refX1 = remo1.rotation.x;
             
-        canoa1.position.y = canoa1.position.y + speedX;
-        if (speedX > 5) speedX = 5;
-        if (speedX > 0) speedX = speedX - 0.03;
-        if (speedX < 0) speedX = 0;
+        canoa1.position.y = canoa1.position.y + speedX1;
+        if (speedX1 > 5) speedX1 = 5;
+        if (speedX1 > 0) speedX1 = speedX1 - 0.03;
+        if (speedX1 < 0) speedX1 = 0;
 
 
         // Calculamos el avance de la cámara
