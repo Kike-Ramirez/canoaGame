@@ -145,13 +145,13 @@
         metaGeometry = new THREE.PlaneGeometry(1704,400);
         metaTexture = THREE.ImageUtils.loadTexture( "/img/meta.png" );
         metaTexture.minFilter = THREE.NearestFilter;
-        metaMaterial = new THREE.MeshLambertMaterial({color: white, map: metaTexture});
+        metaMaterial = new THREE.MeshLambertMaterial({color: 'white', map: metaTexture});
         meta = new THREE.Mesh(metaGeometry, metaMaterial);
         meta.position.x = 0;
         meta.position.y = 0;
         meta.position.z = 10;
         scene.add(meta);
-        
+
                 
     }
 
