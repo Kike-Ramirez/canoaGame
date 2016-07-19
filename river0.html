@@ -236,16 +236,16 @@
         flechaUP.position.x = 200;
         flechaUP.position.y = -800;
         flechaUP.position.z = -50;
+        flechaUP.rotation.z = Math.PI;
 
         flechaDOWN.position.x = 200;
         flechaDOWN.position.y = -800;
         flechaDOWN.position.z = -50;
-        flechaUP.rotation.z = Math.PI;
 
         scene.add(canoa1);
         scene.add(remo1);
         scene.add(flechaUP);
-        scene.add(flechDOWN);
+        scene.add(flechaDOWN);
 
         socket.on('acc1', function(msg){
             acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
@@ -347,9 +347,9 @@
          }
 
         else {
-            
+
             flechaUP.position.z = -10;
-            flechDOWN.position.z = -10;
+            flechaDOWN.position.z = -10;
         }
 
     }
