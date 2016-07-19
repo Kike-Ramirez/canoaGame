@@ -32,6 +32,7 @@
     var speedX0, speedX1;
     var refX0, refX1;
     var socket;
+    var rockPositions, rockTextures;
 
     /**
      * Initializes the scene, camera and objects. Called when the window is
@@ -142,6 +143,15 @@
 
     }
 
+    function initRocas() {
+
+
+    }
+
+    function updateRocas() {
+
+
+    }
 
     function initCanoas() {
 
@@ -149,12 +159,22 @@
 
         canoaGeometry = new THREE.BoxGeometry(360, 512, 1);
         remoGeometry = new THREE.BoxGeometry(10, 20, 10);
-        canoaTexture0 = THREE.ImageUtils.loadTexture( "/img/1_1.png" );
-        canoaTexture1 = THREE.ImageUtils.loadTexture("/img/2_1.png")
+        canoaTexture0 = {}
+        canoaTexture1 = {}THREE.ImageUtils.loadTexture("/img/2_1.png")
+
+        for (int i = 0; i < 10; i++) {
+
+            String name0 = "/img/1_" + str(i+1) + ".png";
+            String name1 = "/img/2_" + str(i+1) + ".png";
+
+            canoaTexture0[i] = THREE.ImageUtils.loadTexture( name0 );
+            canoaTexture1[i] = THREE.ImageUtils.loadTexture( name1 );
+
+        }
         canoaTexture0.minFilter = THREE.NearestFilter;
         canoaTexture1.minFilter = THREE.NearestFilter;
-        canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0,  transparent: true });
-        canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1,  transparent: true });
+        canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0[0],  transparent: true });
+        canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1[0],  transparent: true });
         remoMaterial = new THREE.MeshLambertMaterial({color: 'black'});
 
 
