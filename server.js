@@ -7,7 +7,7 @@ var io = require('socket.io')(http);
 app.use(express.static('public'));
 
 app.get('/', function(req, res){
-  res.sendfile('basicRiver.html');
+  res.sendfile('river0.html');
 });
 
 app.get('/remo0', function(req, res){
