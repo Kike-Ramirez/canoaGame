@@ -321,16 +321,16 @@
 
         // Calculamos el avance de la cámara
         camera.position.y = canoa0.position.y + 100;
-        if (canoa1.position.y - canoa0.position.y > 1080) {
+        if (canoa1.position.y - canoa0.position.y > 500) {
 
-            flecha.position.y = canoa0.position.y -800;
+            flecha.position.y = canoa0.position.y + 300;
             flecha.position.z = 50;
 
         }
 
-        else if (canoa0.position.y - canoa1.position.y > 1080) {
+        else if (canoa0.position.y - canoa1.position.y > 500) {
 
-            flecha.position.y = canoa0.position.y + 100;
+            flecha.position.y = canoa0.position.y - 300;
             flecha.position.z = 50; 
 
         }
