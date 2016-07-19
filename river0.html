@@ -151,6 +151,7 @@
         scene.add(meta);
 
         rockTextures = {};
+        rocks = {};
 
         // Create the rocks
         for (var i = 0; i < 2; i++) {
@@ -165,17 +166,18 @@
 
         for (var i = 0; i < rockNumber; i++) {
 
-            var j = Math.abs(Math.random(2));
+            var j = Math.floor(2 * Math.random());
             rockGeometry = new THREE.PlaneGeometry(79, 50);
             rockMaterial = new THREE.MeshLambertMaterial({transparent: true, map: rockTextures[j]});
             rocks[i] = new THREE.Mesh(rockGeometry, rockMaterial);
 
-            if (Math.random(1) > 0.5) rocks[i].position.x = Math.abs(Math.random(-400, -300));
-            else rocks[i].position.x = Math.abs(random(300, 400));
+            if ( Math.random() > 0.5 ) rocks[i].position.x = Math.round(-500 + 100 * Math.random());
+            else rocks[i].position.x = Math.round(400 + 100 * Math.random());
 
-            rocks[i].position.y = Math.abs(Math.random(-100, 10000));
 
-            rocks[i].position.z = 10;
+            rocks[i].position.y = i * Math.floor(-100 + 11000 * Math.random());
+
+            rocks[i].position.z = 20;
 
             scene.add(rocks[i]);
 
@@ -187,8 +189,6 @@
 
     function updateRiver() {
 
-        console.log(plane0.position.y - canoa0.position.y);
-        console.log(plane1.position.y - canoa0.position.y);tg
         if (plane0.position.y - canoa0.position.y < -880) plane0.position.y += 2 * 1080;
         if (plane1.position.y - canoa0.position.y < -880) plane1.position.y += 2 * 1080;
 
@@ -230,6 +230,7 @@
         remoMaterial = new THREE.MeshLambertMaterial({color: 'black', transparent: true});
         
         flechaTexture = THREE.ImageUtils.loadTexture( "/img/flecha.png" );
+        flechaTexture.minFilter = THREE.NearestFilter;
         flechaMaterial = new THREE.MeshLambertMaterial({ map: flechaTexture, transparent: true });
 
 
