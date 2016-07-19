@@ -165,7 +165,7 @@
 
         canoaGeometry = new THREE.BoxGeometry(360, 512, 1);
         remoGeometry = new THREE.BoxGeometry(10, 20, 10);
-        flechaGeometry = new THREE.BoxGeometry(350, 250, 1);
+        flechaGeometry = new THREE.BoxGeometry(70, 50, 1);
 
         canoaTexture0 = {};
         canoaTexture1 = {};
@@ -232,7 +232,7 @@
         // Creamos la flecha
 
         flecha.position.x = 200;
-        flecha.position.y = -200;
+        flecha.position.y = -800;
         flecha.position.z = -50;
 
         scene.add(canoa1);
@@ -323,7 +323,7 @@
         camera.position.y = canoa0.position.y + 100;
         if (canoa1.position.y - canoa0.position.y > 1080) {
 
-            flecha.position.y = canoa0.position.y -200;
+            flecha.position.y = canoa0.position.y -800;
             flecha.position.z = 50;
 
         }
