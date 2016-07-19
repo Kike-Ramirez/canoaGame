@@ -20,7 +20,7 @@
     var renderer;
     var scene;
     var camera;
-    var river;
+    var plane0, plane1;
     var canoa0, canoa1;
     var gyro0, gyro1;
     var acc0, acc1;
@@ -88,29 +88,28 @@
     function initRiver() {
 
         // create the ground plane
-        var plane, plane2;
         var planeGeometry = new THREE.PlaneGeometry(1920, 1080);
         var planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" )
         planeTexture.minFilter = THREE.NearestFilter;
         var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, map: planeTexture });
-        plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.receiveShadow = false;
-        plane2.receiveShadow = false;
+        plane0 = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane1 = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane0.receiveShadow = false;
+        plane1.receiveShadow = false;
 
         // rotate and position the plane
         //plane.rotation.x = -0.0 * Math.PI20
-        plane.position.x = 0;
-        plane.position.y = 0;
-        plane.position.z = 0;
+        plane0.position.x = 0;
+        plane0.position.y = 0;
+        plane0.position.z = 0;
 
-        plane2.position.x = 0;
-        plane2.position.y = 1080;
-        plane2.position.z = 0;
+        plane1.position.x = 0;
+        plane1.position.y = 1080;
+        plane1.position.z = 0;
 
         // add the plane to the scene
-        scene.add(plane);
-        scene.add(plane2);
+        scene.add(plane0);
+        scene.add(plane1);
 
         // position and point the camera to the center of the scene
         camera.position.y = 0;
