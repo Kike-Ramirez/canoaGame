@@ -107,6 +107,9 @@
      * for future renders
      */
     function render() {
+
+        // Render texts
+        text.innerHTML = "Distancia a Meta: " + (meta.position.y - canoa0.position.y).toString() + "<br> Distancia a oponente: " + (Math.abs(canoa0.position.y - canoa1.position.y)).toString();
         // render using requestAnimationFrame
         updateRiver();
         updateCanoas();
