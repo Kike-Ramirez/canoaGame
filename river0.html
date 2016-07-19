@@ -146,8 +146,8 @@
         canoa0.castShadow = false;
         scene.add(canoa0);
         scene.add(remo0);
-        canoa0.position.x = -200;
-        remo0.position.x = -200;
+        canoa0.position = new THREE.Vector3( -200, 0, 0);
+        remo0.position = new THREE.Vector3( -200, 0, 0);
         socket.on('acc0', function(msg){
             acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro0 = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
