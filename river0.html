@@ -115,8 +115,6 @@
 
     function initRiver() {
 
-        console.log("Rio inicializado")
-
         // create the ground plane
         planeGeometry = new THREE.PlaneGeometry(1920, 1080);
         planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" );
@@ -176,7 +174,6 @@
 
     function initCanoas() {
 
-        console.log("Canoas inicializadas")
 
         canoaGeometry = new THREE.BoxGeometry(360, 512, 1);
         remoGeometry = new THREE.BoxGeometry(10, 20, 10);
@@ -345,8 +342,6 @@
         // Calculamos el avance de la cámara
         camera.position.y = canoa0.position.y + 300;
         
-        console.log(canoa0.position.y - canoa1.position.y);
-
         if (canoa0.position.y - canoa1.position.y > 450) {
 
             flechaDOWN.position.y = canoa0.position.y + 20;
