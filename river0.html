@@ -52,7 +52,7 @@
         // position and point the camera to the center of the scene
         camera.position.x = 0;
         camera.position.y = 0;
-        camera.position.z = 600;
+        camera.position.z = 650;
 
         ambientLight = new THREE.AmbientLight(0xffffff);
         scene.add(ambientLight);
@@ -148,7 +148,7 @@
         metaMaterial = new THREE.MeshLambertMaterial({transparent: true, map: metaTexture});
         meta = new THREE.Mesh(metaGeometry, metaMaterial);
         meta.position.x = 0;
-        meta.position.y = 5000;
+        meta.position.y = 10000;
         meta.position.z = 20;
         scene.add(meta);
 
@@ -347,14 +347,14 @@
 
         if (canoa0.position.y - canoa1.position.y > 450) {
 
-            flechaDOWN.position.y = canoa0.position.y - 180;
+            flechaDOWN.position.y = canoa0.position.y + 20;
             flechaDOWN.position.z = 50;
 
         }
 
         else if (canoa0.position.y - canoa1.position.y < -450) {
 
-             flechaUP.position.y = canoa0.position.y + 480;
+             flechaUP.position.y = canoa0.position.y + 580;
              flechaUP.position.z = 50; 
 
          }
