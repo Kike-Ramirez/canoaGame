@@ -17,7 +17,7 @@
         }
 
         .text-big{
-            font-family: 'Playfair Display';
+            font-family: "PlayfairDisplay";
             font-size: 64px;
             color: #ffffff;
             text-align: center;
@@ -404,7 +404,6 @@
         socket.on('acc0', function(msg){
             acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
             gyro0 = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
-            console.log(acc0);
 
         });
 
@@ -461,7 +460,7 @@
         if (status == 0) {
 
             text.innerHTML = "";
-            text2.innerHTML = "SummerGame<br>by espadaysantacruz";
+            text2.innerHTML = "Summer Game<br>by espadaysantacruz";
             text3.innerHTML = "";
             text4.innerHTML = "";
             text5.innerHTML = "";
@@ -488,7 +487,6 @@
         }
 
         else if (status == 3) {
-            console.log("Terminado");
             text.innerHTML = "";
             text6.innerHTML = "";
             text7.innerHTML = "";
@@ -516,9 +514,9 @@
 
 
              
-            text5.innerHTML = "Speed Player 1: " + (Math.floor(speedX0)).toString() + " km/h <br>Speed Player 2: " + (Math.floor(speedX1)).toString() + " km/h";
+            text5.innerHTML = "Speed Player 1: " + (Math.floor(speedX0)).toString() + " knots <br>Speed Player 2: " + (Math.floor(speedX1)).toString() + " knots";
 
-            text7.innerHTML = "Distance between players: " + (Math.abs(Math.floor(canoa0.position.y - canoa1.position.y))).toString();
+            text7.innerHTML = "Distance between players: " + (Math.abs(Math.floor(canoa0.position.y - canoa1.position.y))).toString() + " m.";
 
             timeGame = Math.floor((Date.now() - timeGameCheck) / 1000);
 
@@ -707,8 +705,6 @@
         else if (status == 2) {
 
             timeGameCheck = Date.now();
-            console.log("ahora");
-            console.log(timeGameCheck);
 
         }
 
