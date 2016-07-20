@@ -2,12 +2,34 @@
 <html>
   <head>
   </head>
+  <style>
+    body {
+    /* Ubicación de la imagen */
+    background-image: url(images/remo_jugador_DOS.png);
 
+    /* Nos aseguramos que la imagen de fondo este centrada vertical y
+      horizontalmente en todo momento */
+    background-position: center center;
+
+    /* La imagen de fondo no se repite */
+    background-repeat: no-repeat;
+
+    /* La imagen de fondo está fija en el viewport, de modo que no se mueva cuando
+       la altura del contenido supere la altura de la imagen. */
+    background-attachment: fixed;
+
+    /* La imagen de fondo se reescala cuando se cambia el ancho de ventana
+       del navegador */
+    background-size: cover;
+
+    /* Fijamos un color de fondo para que se muestre mientras se está
+      cargando la imagen de fondo o si hay problemas para cargarla  */
+    background-color: #464646;
+  }
+  </style>
   <body>
-
-  <h1>EMIT</h1>
-
   </body>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
