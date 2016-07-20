@@ -654,7 +654,7 @@
     window.addEventListener('resize', handleResize, false);
 
     //add event listener
-    window.addEventListener('click', function(event) {
+    window.addEventListener('touchStart', function(event) {
 
         socket.emit('click1', true);
         changeStatus();
