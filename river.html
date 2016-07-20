@@ -488,7 +488,7 @@
                 text.innerHTML = "Player 1 is Leading...";
                 text4.innerHTML = "Distance to Goal: " + (Math.floor(meta.position.y - canoa0.position.y - 100)).toString() + " m."
             }
-            else if (canoa0.position.y < canoa1.position.y) {
+            else if (canoa1.position.y > canoa0.position.y) {
                 text.innerHTML = "Player 2 is Leading...";
                 text4.innerHTML = "Distance to Goal: " + (Math.floor(meta.position.y - canoa1.position.y - 100)).toString() + " m.";
             }
