@@ -562,8 +562,11 @@
 
     }
 
-    function changeStatus() {
+    function resetGame() {
 
+        canoa0.position.y = 0;
+        canoa1.position.y = 0;
+        camera.position.y = canoa0.position.y;
 
     }
 
@@ -591,8 +594,11 @@
 
         }
 
-        else if (status == 4) status = 0;
-        console.log(status);
+        else if (status == 4) {
+
+            status = 0;
+            resetGame();
+        }
     });
 
 </script>
