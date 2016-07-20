@@ -410,10 +410,10 @@
 
         indice0 = 0;
         indice1 = 0;
-        camera.position.y = canoa0.position.y + 300;
+        camera.position.y = canoa1.position.y + 300;
 
         socket.on('click1', function(msg){
-            
+
             changeStatus();
 
         });
@@ -451,19 +451,19 @@
             console.log("Terminado");
             text.innerHTML = "";
 
-            if (winner == 0) text2.innerHTML = "YOU WIN!!"
-            else if (winner == 1) text2.innerHTML = "YOU LOOSE..."
+            if (winner == 0) text2.innerHTML = "YOU LOOSE..."
+            else if (winner == 1) text2.innerHTML = "YOU WIN!!"
             else text2.innerHTML = "DRAW"
         }
 
         else if (status == 2) {
 
-            if (canoa0.position.y > canoa1.position.y) text.innerHTML = "You are Leading..."
-            else if (canoa0.position.y < canoa1.position.y) text.innerHTML = "You are Losing..."
+            if (canoa0.position.y > canoa1.position.y) text.innerHTML = "You are Losing..."
+            else if (canoa0.position.y < canoa1.position.y) text.innerHTML = "You are Leading..."
             else text.innerHTML = "You are tied..."
 
-            text4.innerHTML = "Distance to Goal: " + (Math.floor(meta.position.y - canoa0.position.y - 100)).toString() + " m." 
-            text5.innerHTML = "Speed: " + (Math.floor(speedX0)).toString() + " km/h";
+            text4.innerHTML = "Distance to Goal: " + (Math.floor(meta.position.y - canoa1.position.y - 100)).toString() + " m." 
+            text5.innerHTML = "Speed: " + (Math.floor(speedX1)).toString() + " km/h";
 
             timeGame = Math.floor((Date.now() - timeGameCheck) / 1000);
 
@@ -542,18 +542,18 @@
             else indice1 = 0;
 
             // Calculamos el avance de la cámara
-            camera.position.y = canoa0.position.y + 300;
+            camera.position.y = canoa1.position.y + 300;
             
-            if (canoa0.position.y - canoa1.position.y > 450) {
+            if (canoa1.position.y - canoa0.position.y > 450) {
 
-                flechaDOWN.position.y = canoa0.position.y + 20;
+                flechaDOWN.position.y = canoa1.position.y + 20;
                 flechaDOWN.position.z = 50;
 
             }
 
-            else if (canoa0.position.y - canoa1.position.y < -450) {
+            else if (canoa1.position.y - canoa0.position.y < -450) {
 
-                 flechaUP.position.y = canoa0.position.y + 580;
+                 flechaUP.position.y = canoa1.position.y + 580;
                  flechaUP.position.z = 50; 
 
              }
@@ -616,7 +616,7 @@
 
         canoa0.position.y = 0;
         canoa1.position.y = 0;
-        camera.position.y = canoa0.position.y + 300;
+        camera.position.y = canoa1.position.y + 300;
         speedX0 = 0;
         speedX1 = 0;
 

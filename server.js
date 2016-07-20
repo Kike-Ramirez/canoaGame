@@ -6,16 +6,16 @@ var io = require('socket.io')(http);
 
 app.use(express.static('public'));
 
-app.get('/', function(req, res){
+app.get('/canoa0', function(req, res){
   res.sendfile('river0.html');
+});
+
+app.get('/canoa1', function(req, res){
+  res.sendfile('river1.html');
 });
 
 app.get('/remo0', function(req, res){
   res.sendfile('remo0.html');
-});
-
-app.get('/remo1', function(req, res){
-  res.sendfile('remo1.html');
 });
 
 app.get('/remo1', function(req, res){
