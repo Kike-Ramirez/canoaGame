@@ -6,11 +6,26 @@
     <script src="/libs/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://fonts.google.com/specimen/Fira+Mono?query=fira&selection.family=Fira+Mono">
+    <link rel="stylesheet" type="text/css" href="https://fonts.google.com/specimen/Playfair+Display?query=playfair&selection.family=Fira+Mono|Playfair+Display">
+
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
+        }
+
+        .text-big{
+            font-family: 'Playfair Display';
+            font-size: 64px;
+            color: #ffffff;
+        }
+
+        .text-small{
+            font-family: 'Fira Mono';
+            font-size: 24px;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -26,6 +41,7 @@
     var canoa0, canoa1;
     var flechaUP, flechaDOWN, flechaGeometry, flechaTexture, flechaMaterial;
     var meta, megaGeometry, metaTexture, metaMaterial;
+    var salida, salidaGeometry, salidaTexture, salidaMaterial;
     var remando0, remando1;
     var canoaGeometry, canoaTexture0, canoaTexture1, canoaMaterial0, canoaMaterial1;
     var remoGeometry, remoMaterial;
@@ -37,7 +53,13 @@
     var socket;
     var rocks, rockGeometry, rockMaterial, rockTextures;
     var indice0, indice1;
-    var text;
+    var text, text2, text3;
+
+    // 0: idle - 1: cuenta atras - 2: playing - 3: ended
+    var status;
+    var timeCount, timeCountCheck;
+    var timeGame, timeGameCheck;
+    var winner;
 
     /**
      * Initializes the scene, camera and objects. Called when the window is
@@ -92,7 +114,33 @@
         text.innerHTML = "Distancia a Meta: " + (Math.floor(meta.position.y - canoa0.position.y)).toString() + "<br> Distancia a oponente: " + (Math.floor(canoa0.position.y - canoa1.position.y)).toString();
         text.style.top = 20 + 'px';
         text.style.left = 20 + 'px';
+        text.className = "text-small";
         document.body.appendChild(text);
+
+        text2 = document.createElement('div');
+        text2.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text2.style.width = 10;
+        text2.style.height = 10;
+        text2.style.backgroundColor = "transparent";
+        text2.innerHTML = "";
+        text2.style.top = 400 + 'px';
+        text2.style.left = 300 + 'px';
+        text2.className = "text-big";
+        document.body.appendChild(text2);
+
+        // Textos en pantalla
+        text3 = document.createElement('div');
+        text3.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text3.style.width = 100;
+        text3.style.height = 100;
+        text3.style.backgroundColor = "transparent";
+        text3.innerHTML = "";
+        text3.style.top = 20 + 'px';
+        text3.style.left = 400 + 'px';
+        text3.className = "text-small";
+        document.body.appendChild(text3);
 
         // add the output of the renderer to the html element
         document.body.appendChild(renderer.domElement);
@@ -100,6 +148,12 @@
         // call the render function, after the first render, interval is determined
         // by requestAnimationFrame
         render();
+
+        status = 0;
+        winner = -1;
+
+
+
     }
 
     /**
@@ -123,6 +177,10 @@
      * are updated at the correct moment.
      */
     function handleResize() {
+
+        text2.style.top = window.innerWidth/2 + 'px';
+        text2.style.left = window.innerHeight/2 + 'px';
+
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -165,6 +223,18 @@
         meta.position.y = 10000;
         meta.position.z = 20;
         scene.add(meta);
+
+        // Create Salida
+
+        salidaGeometry = new THREE.PlaneGeometry(122, 106);
+        salidaTexture = THREE.ImageUtils.loadTexture( "/img/salida.png" );
+        salidaTexture.minFilter = THREE.NearestFilter;
+        salidaMaterial = new THREE.MeshLambertMaterial({transparent: true, map: salidaTexture});
+        salida = new THREE.Mesh(salidaGeometry, salidaMaterial);
+        salida.position.x = 0;
+        salida.position.y = 200;
+        salida.position.z = 20;
+        scene.add(salida);        
 
         rockTextures = {};
         rocks = {};
@@ -209,16 +279,6 @@
 
         if (plane0.position.y - canoa0.position.y < -880) plane0.position.y += 2 * 1080;
         if (plane1.position.y - canoa0.position.y < -880) plane1.position.y += 2 * 1080;
-
-    }
-
-    function initRocas() {
-
-
-    }
-
-    function updateRocas() {
-
 
     }
 
@@ -318,100 +378,151 @@
 
         indice0 = 0;
         indice1 = 0;
+        camera.position.y = canoa0.position.y + 300;
 
     }
 
     function updateCanoas() {
 
-        // Calculamos el avance de la canoa 0
-        remo0.setRotationFromQuaternion(gyro0);
+        if (status == 1) {
 
-        if (refX0- remo0.rotation.x > 0.05) {
+            
+            timeCount = (Date.now() - timeCountCheck) / 1000;
 
-            speedX0 = speedX0 + 0.2;
-            remando0 = true;
+            if (timeCount < 1) text2.innerHTML = "3";
+            else if (timeCount < 2) text2.innerHTML = "2";
+            else if (timeCount < 3) text2.innerHTML = "1";
+            else if (timeCount < 4) text2.innerHTML = "GO!";
+
 
         }
 
-        refX0 = remo0.rotation.x;
-            
-        canoa0.position.y = canoa0.position.y + speedX0;
-        if (speedX0 > 5) speedX0 = 5;
-        if (speedX0 > 0) speedX0 = speedX0 - 0.03;
-        if (speedX0 < 0) speedX0 = 0;
+        else if (status == 3) {
 
-        if (remando0) {
-            
-            indice0 = indice0 + 1;
+            if (winner == 0) text2.innerHML = "YOU WIN!!"
+            else if (winner == 1) text2.innerHTML = "YOU LOOSE..."
+            else text2.innerHTML = "DRAW"
+        }
 
-            if (indice0 == 30) {
-                indice0 = 0;
-                remando0 = false;
+        else if (status == 2) {
+
+
+            timeGame = Math.floor((Date.now() - timeGameCheck) / 1000);
+
+            var seconds = timeGame % 60;
+            var minutes = Math.floor(timeGame / 60);
+
+            text2.innerHTML = "";
+            if (seconds < 10) text3.innerHTML = "0" + minutes.toString() + " : 0" + seconds.toString();
+            else text3.innerHTML = "0" + minutes.toString() + " : " + seconds.toString();
+
+            // Calculamos el avance de la canoa 0
+            remo0.setRotationFromQuaternion(gyro0);
+
+            if (refX0- remo0.rotation.x > 0.05) {
+
+                speedX0 = speedX0 + 0.2;
+                remando0 = true;
+
             }
 
-            canoa0.material.map = canoaTexture0[Math.floor(indice0/3)];
-            canoa0.material.needsUpdate = true;
-
-        }
-
-        else indice = 0;
-
-
-        // Calculamos el avance de la canoa 1
-        remo1.setRotationFromQuaternion(gyro1);
-
-
-        if (refX1- remo1.rotation.x > 0.05) {
-
-            speedX1 = speedX1 + 0.2;
-            remando1 = true;
+            refX0 = remo0.rotation.x;
                 
-        }
+            canoa0.position.y = canoa0.position.y + speedX0;
+            if (speedX0 > 5) speedX0 = 5;
+            if (speedX0 > 0) speedX0 = speedX0 - 0.03;
+            if (speedX0 < 0) speedX0 = 0;
 
-        refX1 = remo1.rotation.x;
-            
-        canoa1.position.y = canoa1.position.y + speedX1;
-        if (speedX1 > 5) speedX1 = 5;
-        if (speedX1 > 0) speedX1 = speedX1 - 0.03;
-        if (speedX1 < 0) speedX1 = 0;
+            if (remando0) {
+                
+                indice0 = indice0 + 1;
 
-        if (remando1) {
-            
-            indice1 = indice1 + 1;
+                if (indice0 == 30) {
+                    indice0 = 0;
+                    remando0 = false;
+                }
 
-            if (indice1 == 30) {
-                indice1 = 0;
-                remando1 = false;
+                canoa0.material.map = canoaTexture0[Math.floor(indice0/3)];
+                canoa0.material.needsUpdate = true;
+
             }
-            canoa1.material.map = canoaTexture1[Math.floor(indice1/3)];
-            canoa1.material.needsUpdate = true;
+
+            else indice = 0;
+
+
+            // Calculamos el avance de la canoa 1
+            remo1.setRotationFromQuaternion(gyro1);
+
+
+            if (refX1- remo1.rotation.x > 0.05) {
+
+                speedX1 = speedX1 + 0.2;
+                remando1 = true;
+                    
+            }
+
+            refX1 = remo1.rotation.x;
+                
+            canoa1.position.y = canoa1.position.y + speedX1;
+            if (speedX1 > 5) speedX1 = 5;
+            if (speedX1 > 0) speedX1 = speedX1 - 0.03;
+            if (speedX1 < 0) speedX1 = 0;
+
+            if (remando1) {
+                
+                indice1 = indice1 + 1;
+
+                if (indice1 == 30) {
+                    indice1 = 0;
+                    remando1 = false;
+                }
+                canoa1.material.map = canoaTexture1[Math.floor(indice1/3)];
+                canoa1.material.needsUpdate = true;
+
+            }
+
+            else indice1 = 0;
+
+            // Calculamos el avance de la cámara
+            camera.position.y = canoa0.position.y + 300;
+            
+            if (canoa0.position.y - canoa1.position.y > 450) {
+
+                flechaDOWN.position.y = canoa0.position.y + 20;
+                flechaDOWN.position.z = 50;
+
+            }
+
+            else if (canoa0.position.y - canoa1.position.y < -450) {
+
+                 flechaUP.position.y = canoa0.position.y + 580;
+                 flechaUP.position.z = 50; 
+
+             }
+
+            else {
+
+                flechaUP.position.z = -10;
+                flechaDOWN.position.z = -10;
+            }
+
+            if (canoa0.position.y >= 10000) {
+
+                winner = 0;
+                status++;
+
+            }
+
+            else if (canoa1.position.y >= 10000) {
+
+                winner = 1;
+                status++;
+
+            }
 
         }
 
-        else indice1 = 0;
 
-        // Calculamos el avance de la cámara
-        camera.position.y = canoa0.position.y + 300;
-        
-        if (canoa0.position.y - canoa1.position.y > 450) {
-
-            flechaDOWN.position.y = canoa0.position.y + 20;
-            flechaDOWN.position.z = 50;
-
-        }
-
-        else if (canoa0.position.y - canoa1.position.y < -450) {
-
-             flechaUP.position.y = canoa0.position.y + 580;
-             flechaUP.position.z = 50; 
-
-         }
-
-        else {
-
-            flechaUP.position.z = -10;
-            flechaDOWN.position.z = -10;
-        }
 
     }
 
@@ -443,6 +554,11 @@
 
     }
 
+    function changeStatus() {
+
+
+    }
+
     // calls the init function when the window is done loading.
     window.onload = init;
     // calls the handleResize function when the window is resized
@@ -450,7 +566,25 @@
 
     //add event listener
     window.addEventListener('click', function(event) {
-        console.log("click");
+        status++;
+
+        if (status == 1) {
+
+            setTimeout(function(){ status = 2; timeGameCheck = Date.now();}, 4000);
+            timeCountCheck = Date.now();
+
+        }
+
+        else if (status == 2) {
+
+            timeGameCheck = Date.now();
+            console.log("ahora");
+            console.log(timeGameCheck);
+
+        }
+
+        else if (status == 4) status = 0;
+        console.log(status);
     });
 
 </script>
