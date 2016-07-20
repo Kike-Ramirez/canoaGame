@@ -398,7 +398,7 @@
         }
 
         else if (status == 3) {
-
+            console.log("Terminado");
             text.innerHTML = "";
             text3.innerHTML = "";
             if (winner == 0) text2.innerHTML = "YOU WIN!!"
@@ -508,14 +508,14 @@
                 flechaDOWN.position.z = -10;
             }
 
-            if (canoa0.position.y >= 10000) {
+            if (canoa0.position.y >= meta.position.y) {
 
                 winner = 0;
                 status = 3;
 
             }
 
-            else if (canoa1.position.y >= 10000) {
+            else if (canoa1.position.y >= meta.position.y) {
 
                 winner = 1;
                 status = 3;
