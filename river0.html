@@ -261,7 +261,7 @@
         scene.add(plane1);
 
         // Create the meta
-        metaGeometry = new THREE.PlaneGeometry(1704,400);
+        metaGeometry = new THREE.PlaneGeometry(852,200);
         metaTexture = THREE.ImageUtils.loadTexture( "/img/meta.png" );
         metaTexture.minFilter = THREE.NearestFilter;
         metaMaterial = new THREE.MeshLambertMaterial({transparent: true, map: metaTexture});
@@ -346,10 +346,11 @@
 
             canoaTexture0[i] = THREE.ImageUtils.loadTexture( name0 );
             canoaTexture1[i] = THREE.ImageUtils.loadTexture( name1 );
+            canoaTexture0[i].minFilter = THREE.NearestFilter;
+            canoaTexture1[i].minFilter = THREE.NearestFilter;
 
         }
-        canoaTexture0.minFilter = THREE.NearestFilter;
-        canoaTexture1.minFilter = THREE.NearestFilter;
+
         canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0[0],  transparent: true });
         canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1[0],  transparent: true });
         remoMaterial = new THREE.MeshLambertMaterial({color: 'black', transparent: true});
