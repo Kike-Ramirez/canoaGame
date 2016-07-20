@@ -434,7 +434,7 @@
             else if (canoa0.position.y < canoa1.position.y) text.innerHTML = "You are Losing..."
             else text.innerHTML = "You are tied..."
 
-            text4.innerHTML = "Distance to Goal: " + (Math.floor(meta.position.y - canoa0.position.y)).toString() + " m <br> Speed: " + (Math.floor(speedX0)).toString();
+            text4.innerHTML = "Distance to Goal: " + (Math.floor(meta.position.y - canoa0.position.y - 100)).toString() + " m <br> Speed: " + (Math.floor(speedX0)).toString();
 
             timeGame = Math.floor((Date.now() - timeGameCheck) / 1000);
 
