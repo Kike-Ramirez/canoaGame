@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>canoaGame by espadaysantacruz SC</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <script src="/libs/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://fonts.google.com/specimen/Fira+Mono?query=fira&selection.family=Fira+Mono">
+    <link rel="stylesheet" type="text/css" href="https://fonts.google.com/specimen/Playfair+Display?query=playfair&selection.family=Fira+Mono|Playfair+Display">
+
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .text-big{
+            font-family: 'Playfair Display';
+            font-size: 64px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .text-normal{
+            font-family: 'Fira Mono';
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        .text-small{
+            font-family: 'Fira Mono';
+            font-size: 12px;
+            color: #ffffff;
+        }     
+    </style>
+</head>
+<script>
+
+    // global variables
+    var renderer;
+    var scene;
+    var camera;
+    var ambientLight;
+    var plane0, plane1;
+    var planeGeometry, planeTexture, planeMaterial;
+    var canoa0, canoa1;
+    var flechaUP, flechaDOWN, flechaGeometry, flechaTexture, flechaMaterial;
+    var meta, megaGeometry, metaTexture, metaMaterial;
+    var salida, salidaGeometry, salidaTexture, salidaMaterial;
+    var tempo, tempoGeometry, tempoTexture, tempoMaterial;
+    var remando0, remando1;
+    var canoaGeometry, canoaTexture0, canoaTexture1, canoaMaterial0, canoaMaterial1;
+    var remoGeometry, remoMaterial;
+    var gyro0, gyro1;
+    var acc0, acc1;
+    var remo0, remo1;
+    var speedX0, speedX1;
+    var refX0, refX1;
+    var socket;
+    var rocks, rockGeometry, rockMaterial, rockTextures;
+    var indice0, indice1;
+    var text, text2, text3, text4, text5, text6;
+
+    // 0: idle - 1: cuenta atras - 2: playing - 3: ended
+    var status;
+    var timeCount, timeCountCheck;
+    var timeGame, timeGameCheck;
+    var winner;
+
+    /**
+     * Initializes the scene, camera and objects. Called when the window is
+     * loaded by using window.onload (see below)
+     */
+    function init() {
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 4200);
+        // position and point the camera to the center of the scene
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 1000;
+
+        ambientLight = new THREE.AmbientLight(0xffffff);
+        scene.add(ambientLight);
+
+        // create a render, sets the background color and the size
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000, 1.0);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        gyro0 = 0;
+        gyro1 = 0;
+
+        acc0 = 0;
+        acc1 = 0;
+
+        speedX0 = 0;
+        speedX1 = 0;
+
+        refX0 = 0;
+        refX1 = 0;
+
+        remando0 = false;
+        remando1 = false;
+
+        initRiver();
+        initCanoas();
+
+        // Textos en pantalla
+        text = document.createElement('div');
+        text.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text.style.width = 100;
+        text.style.height = 100;
+        text.style.backgroundColor = "transparent";
+        text.innerHTML = ""
+        text.style.top = 20 + 'px';
+        text.style.left = 20 + 'px';
+        text.className = "text-normal";
+        document.body.appendChild(text);
+
+        text2 = document.createElement('div');
+        text2.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text2.style.width = 10;
+        text2.style.height = 10;
+        text2.style.backgroundColor = "transparent";
+        text2.innerHTML = "";
+        text2.style.top = 350 + 'px';
+        text2.style.left = 150 + 'px';
+        text2.style.textAlign = "center";
+        text2.className = "text-big";
+        document.body.appendChild(text2);
+
+        // Textos en pantalla
+        text3 = document.createElement('div');
+        text3.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text3.style.width = 100;
+        text3.style.height = 100;
+        text3.style.backgroundColor = "transparent";
+        text3.innerHTML = "";
+        text3.style.top = 20 + 'px';
+        text3.style.left = 350 + 'px';
+        text3.className = "text-normal";
+        document.body.appendChild(text3);
+
+        // Textos en pantalla
+        text4 = document.createElement('div');
+        text4.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text4.style.width = 100;
+        text4.style.height = 100;
+        text4.style.backgroundColor = "transparent";
+        text4.innerHTML = "";
+        text4.style.top = 20 + 'px';
+        text4.style.left = 500 + 'px';
+        text4.className = "text-normal";
+        document.body.appendChild(text4);
+
+        // Textos en pantalla
+        text5 = document.createElement('div');
+        text5.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text5.style.width = 100;
+        text5.style.height = 100;
+        text5.style.backgroundColor = "transparent";
+        text5.innerHTML = "";
+        text5.style.top = 50 + 'px';
+        text5.style.left = 500 + 'px';
+        text5.className = "text-small";
+        document.body.appendChild(text5);
+
+        // Textos en pantalla
+        text6 = document.createElement('div');
+        text6.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text6.style.width = 100;
+        text6.style.height = 100;
+        text6.style.backgroundColor = "transparent";
+        text6.innerHTML = "";
+        text6.style.top = 350 + 'px';
+        text6.style.left = 380 + 'px';
+        text6.className = "text-big";
+        document.body.appendChild(text6);
+
+        // add the output of the renderer to the html element
+        document.body.appendChild(renderer.domElement);
+
+        // call the render function, after the first render, interval is determined
+        // by requestAnimationFrame
+        render();
+
+        status = 0;
+        winner = -1;
+
+
+
+    }
+
+    /**
+     * Called when the scene needs to be rendered. Delegates to requestAnimationFrame
+     * for future renders
+     */
+    function render() {
+
+        
+        // render using requestAnimationFrame
+        updateRiver();
+        updateCanoas();
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+    }
+
+
+    /**
+     * Function handles the resize event. This make sure the camera and the renderer
+     * are updated at the correct moment.
+     */
+    function handleResize() {
+
+        text2.style.top = window.innerWidth/2 + 'px';
+        text2.style.left = window.innerHeight/2 + 'px';
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+
+    function initRiver() {
+
+        // create the ground plane
+        planeGeometry = new THREE.PlaneGeometry(2304, 1296);
+        planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" );
+        planeTexture.minFilter = THREE.NearestFilter;
+        planeMaterial = new THREE.MeshLambertMaterial({color: 'white', map: planeTexture });
+        plane0 = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane1 = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane0.receiveShadow = true;
+        plane1.receiveShadow = true;
+
+        // rotate and position the plane
+        //plane.rotation.x = -0.0 * Math.PI20
+        plane0.position.x = 0;
+        plane0.position.y = 200;
+        plane0.position.z = 0;
+
+        plane1.position.x = 0; 
+        plane1.position.y = 1496; 
+        plane1.position.z = 0; 
+
+        // add the plane to the scene
+        scene.add(plane0);
+        scene.add(plane1);
+
+        // Create the meta
+        metaGeometry = new THREE.PlaneGeometry(852,200);
+        metaTexture = THREE.ImageUtils.loadTexture( "/img/meta.png" );
+        metaTexture.minFilter = THREE.NearestFilter;
+        metaMaterial = new THREE.MeshLambertMaterial({transparent: true, map: metaTexture});
+        meta = new THREE.Mesh(metaGeometry, metaMaterial);
+        meta.position.x = 0;
+        meta.position.y = 5100;
+        meta.position.z = 30;
+        scene.add(meta);
+
+        // Create Salida
+
+        salidaGeometry = new THREE.PlaneGeometry(122, 106);
+        salidaTexture = THREE.ImageUtils.loadTexture( "/img/salida.png" );
+        salidaTexture.minFilter = THREE.NearestFilter;
+        salidaMaterial = new THREE.MeshLambertMaterial({transparent: true, map: salidaTexture});
+        salida = new THREE.Mesh(salidaGeometry, salidaMaterial);
+        salida.position.x = 0;
+        salida.position.y = 200;
+        salida.position.z = 20;
+        scene.add(salida);        
+       
+
+        rockTextures = {};
+        rocks = {};
+        // Create the rocks
+        for (var i = 0; i < 2; i++) {
+
+            var nombreRock = "/img/rock_" + (i+1).toString() + ".png";
+            rockTextures[i] = THREE.ImageUtils.loadTexture(nombreRock);
+            rockTextures[i]. minFilter = THREE.NearestFilter;
+
+        }
+
+        var rockNumber = 80;
+
+        for (var i = 0; i < rockNumber; i++) {
+
+            var j = Math.floor(2 * Math.random());
+            rockGeometry = new THREE.PlaneGeometry(79, 50);
+            rockMaterial = new THREE.MeshLambertMaterial({transparent: true, map: rockTextures[j]});
+            rocks[i] = new THREE.Mesh(rockGeometry, rockMaterial);
+
+            if ( Math.random() > 0.5 ) rocks[i].position.x = Math.round(-500 + 100 * Math.random());
+            else rocks[i].position.x = Math.round(400 + 100 * Math.random());
+
+
+            rocks[i].position.y = 10000 / rockNumber * (i + Math.random());
+
+            rocks[i].position.z = 20;
+
+            scene.add(rocks[i]);
+
+        }
+
+        //socket.emit('rocks', rocks);
+
+
+                
+    }
+
+    function updateRiver() {
+
+        if (plane0.position.y - canoa0.position.y < -1096) plane0.position.y += 2 * 1296;
+        if (plane1.position.y - canoa0.position.y < -1096) plane1.position.y += 2 * 1296;
+
+    }
+
+    function initCanoas() {
+
+
+        canoaGeometry = new THREE.BoxGeometry(360, 512, 1);
+        remoGeometry = new THREE.BoxGeometry(10, 20, 10);
+        flechaGeometry = new THREE.BoxGeometry(70, 50, 1);
+
+        canoaTexture0 = {};
+        canoaTexture1 = {};
+
+        for (var i = 0; i < 10; i++) {
+
+            var name0 = "/img/1_" + (i+1).toString() + ".png";
+            var name1 = "/img/2_" + (i+1).toString() + ".png";
+
+            canoaTexture0[i] = THREE.ImageUtils.loadTexture( name0 );
+            canoaTexture1[i] = THREE.ImageUtils.loadTexture( name1 );
+            canoaTexture0[i].minFilter = THREE.NearestFilter;
+            canoaTexture1[i].minFilter = THREE.NearestFilter;
+
+        }
+
+        canoaMaterial0 = new THREE.MeshLambertMaterial({ map: canoaTexture0[0],  transparent: true });
+        canoaMaterial1 = new THREE.MeshLambertMaterial({ map: canoaTexture1[0],  transparent: true });
+        remoMaterial = new THREE.MeshLambertMaterial({color: 'black', transparent: true});
+        
+        flechaTexture = THREE.ImageUtils.loadTexture( "/img/flecha.png" );
+        flechaTexture.minFilter = THREE.NearestFilter;
+        flechaMaterial = new THREE.MeshLambertMaterial({ map: flechaTexture, transparent: true });
+
+
+        socket = io();
+
+        // Creamos la canoa del jugador 0
+        canoa0 = new THREE.Mesh(canoaGeometry, canoaMaterial0);
+        remo0 = new THREE.Mesh(remoGeometry, remoMaterial);
+        flechaUP = new THREE.Mesh(flechaGeometry, flechaMaterial);
+        flechaDOWN = new THREE.Mesh(flechaGeometry, flechaMaterial);
+
+
+        canoa0.castShadow = true;
+
+        canoa0.position.x = -200; 
+        canoa0.position.y = 0;
+        canoa0.position.z = 10;
+   
+        remo0.position.x = -200;
+        remo0.position.y = 0;        
+        remo0.position.z = -500;
+
+        scene.add(canoa0);
+        scene.add(remo0);
+
+        socket.on('acc0', function(msg){
+            acc0 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
+            gyro0 = computeQuaternionFromEulers(acc0[0], acc0[1], acc0[2]);
+
+        });
+
+        // Creamos la canoa del jugador 1
+        canoa1 = new THREE.Mesh(canoaGeometry, canoaMaterial1);
+        remo1 = new THREE.Mesh(remoGeometry, remoMaterial);
+
+        canoa1.castShadow = true;
+
+        canoa1.position.x = 200;
+        canoa1.position.y = 0;
+        canoa1.position.z = 10; 
+
+        remo1.position.x = 200;
+        remo1.position.y = 0;        
+        remo1.position.z = -50;
+
+        // Creamos la flecha
+
+        flechaUP.position.x = 190;
+        flechaUP.position.y = 0;
+        flechaUP.position.z = -50;
+        flechaUP.rotation.z = Math.PI;
+
+        flechaDOWN.position.x = 190;
+        flechaDOWN.position.y = 0;
+        flechaDOWN.position.z = -50;
+
+        scene.add(canoa1);
+        scene.add(remo1);
+        scene.add(flechaUP);
+        scene.add(flechaDOWN);
+
+        socket.on('acc1', function(msg){
+            acc1 =  [Math.floor(msg[0]), Math.floor(msg[1]), Math.floor(msg[2])];
+            gyro1 = computeQuaternionFromEulers(acc1[0], acc1[1], acc1[2]);
+
+        });        
+
+        indice0 = 0;
+        indice1 = 0;
+        camera.position.y = canoa0.position.y + 300;
+
+        socket.on('click1', function(msg){
+            
+            changeStatus();
+
+        });
+
+    }
+
+    function updateCanoas() {
+
+        if (status == 0) {
+
+            text.innerHTML = "";
+            text2.innerHTML = "SummerGame<br>by espadaysantacruz";
+            text3.innerHTML = "";
+            text4.innerHTML = "";
+            text5.innerHTML = "";
+            text6.innerHTML = "";
+        }
+
+        if (status == 1) {
+
+            text.innerHTML = "";
+            text2.innerHTML = "";
+            text3.innerHTML = "";
+            text4.innerHTML = "";
+            text5.innerHTML = "";
+            timeCount = (Date.now() - timeCountCheck) / 1000;
+
+            if (timeCount < 1) text6.innerHTML = "3";
+            else if (timeCount < 2) text6.innerHTML = "2";
+            else if (timeCount < 3) text6.innerHTML = "1";
+            else if (timeCount < 4) text6.innerHTML = "GO!";
+
+
+        }
+
+        else if (status == 3) {
+            console.log("Terminado");
+            text.innerHTML = "";
+            text6.innerHTML = "";
+
+            if (winner == 0) text6.innerHTML = "PLAYER 1 WIN!!"
+            else if (winner == 1) text6.innerHTML = "PLAYER 2 WIN!!"
+            else text6.innerHTML = "DRAW"
+        }
+
+        else if (status == 2) {
+
+            text6.innerHTML = "";
+            if (canoa0.position.y > canoa1.position.y) text.innerHTML = "Player 1 is Leading..."
+            else if (canoa0.position.y < canoa1.position.y) text.innerHTML = "Player 2 is Leading..."
+            else text.innerHTML = "You are tied..."
+
+            text4.innerHTML = "Distance to Goal: " + (Math.floor(meta.position.y - canoa0.position.y - 100)).toString() + " m." 
+            text5.innerHTML = "Speed Player 1: " + (Math.floor(speedX0)).toString() + " km/h <br>Speed Player 2: " + (Math.floor(speedX1)).toString();
+
+            timeGame = Math.floor((Date.now() - timeGameCheck) / 1000);
+
+            var seconds = timeGame % 60;
+            var minutes = Math.floor(timeGame / 60);
+
+            text2.innerHTML = "";
+            if (seconds < 10) text3.innerHTML = "0" + minutes.toString() + " : 0" + seconds.toString();
+            else text3.innerHTML = "0" + minutes.toString() + " : " + seconds.toString();
+
+            // Calculamos el avance de la canoa 0
+            remo0.setRotationFromQuaternion(gyro0);
+
+            if (refX0- remo0.rotation.x > 0.02) {
+
+                speedX0 = speedX0 + 0.2;
+                remando0 = true;
+
+            }
+
+            refX0 = remo0.rotation.x;
+                
+            canoa0.position.y = canoa0.position.y + speedX0;
+            if (speedX0 > 5) speedX0 = 5;
+            if (speedX0 > 0) speedX0 = speedX0 - 0.03;
+            if (speedX0 < 0) speedX0 = 0;
+
+            if (remando0) {
+                
+                indice0 = indice0 + 1;
+
+                if (indice0 == 30) {
+                    indice0 = 0;
+                    remando0 = false;
+                }
+
+                canoa0.material.map = canoaTexture0[Math.floor(indice0/3)];
+                canoa0.material.needsUpdate = true;
+
+            }
+
+            else indice = 0;
+
+
+            // Calculamos el avance de la canoa 1
+            remo1.setRotationFromQuaternion(gyro1);
+
+
+            if (refX1- remo1.rotation.x > 0.02) {
+
+                speedX1 = speedX1 + 0.2;
+                remando1 = true;
+                    
+            }
+
+            refX1 = remo1.rotation.x;
+                
+            canoa1.position.y = canoa1.position.y + speedX1;
+            if (speedX1 > 5) speedX1 = 5;
+            if (speedX1 > 0) speedX1 = speedX1 - 0.03;
+            if (speedX1 < 0) speedX1 = 0;
+
+            if (remando1) {
+                
+                indice1 = indice1 + 1;
+
+                if (indice1 == 30) {
+                    indice1 = 0;
+                    remando1 = false;
+                }
+                canoa1.material.map = canoaTexture1[Math.floor(indice1/3)];
+                canoa1.material.needsUpdate = true;
+
+            }
+
+            else indice1 = 0;
+
+            // Calculamos el avance de la cámara
+            if (canoa0.position.y > canoa1.position.y) camera.position.y = canoa0.position.y + 300;
+            else camera.position.y = canoa1.position.y + 300;
+            
+            if (canoa0.position.y - canoa1.position.y > 450) {
+
+                flechaDOWN.position.y = canoa0.position.y + 20;
+                flechaDOWN.position.z = 50;
+
+            }
+
+            else if (canoa0.position.y - canoa1.position.y < -450) {
+
+                 flechaUP.position.y = canoa0.position.y + 580;
+                 flechaUP.position.z = 50; 
+
+             }
+
+            else {
+
+                flechaUP.position.z = -10;
+                flechaDOWN.position.z = -10;
+            }
+
+            if (canoa0.position.y >= meta.position.y - 100) {
+
+                winner = 0;
+                status = 3;
+
+            }
+
+            else if (canoa1.position.y >= meta.position.y - 100) {
+
+                winner = 1;
+                status = 3;
+
+            }
+
+        }
+
+
+
+    }
+
+    function computeQuaternionFromEulers(alpha, beta, gamma) {
+
+        var degtorad = Math.PI / 180;
+        var _x = beta * degtorad ; // beta value
+        var _y = gamma * degtorad ; // gamma value
+        var _z = alpha * degtorad ; // alpha value
+
+        var cX = Math.cos( _x/2 );
+        var cY = Math.cos( _y/2 );
+        var cZ = Math.cos( _z/2 );
+        var sX = Math.sin( _x/2 );
+        var sY = Math.sin( _y/2 );
+        var sZ = Math.sin( _z/2 );
+
+        //
+        // ZXY quaternion construction.
+        //
+
+        var w = cX * cY * cZ - sX * sY * sZ;
+        var x = sX * cY * cZ - cX * sY * sZ;
+        var y = cX * sY * cZ + sX * cY * sZ;
+        var z = cX * cY * sZ + sX * sY * cZ;
+
+        //return [ w, x, y, z ];
+        return {"x":x,"y":y,"z":z,"w":w};//return a simple object with the four quaternion values
+
+    }
+
+    function resetGame() {
+
+        canoa0.position.y = 0;
+        canoa1.position.y = 0;
+        camera.position.y = canoa0.position.y + 300;
+        speedX0 = 0;
+        speedX1 = 0;
+
+        plane0.position.x = 0;
+        plane0.position.y = 200;
+        plane0.position.z = 0;
+
+        plane1.position.x = 0; 
+        plane1.position.y = 1496; 
+        plane1.position.z = 0; 
+
+    }
+
+    function changeStatus() {
+
+        status++;
+
+        if (status == 1) {
+
+            setTimeout(function(){ status = 2; timeGameCheck = Date.now();}, 4000);
+            timeCountCheck = Date.now();
+
+        }
+
+        else if (status == 2) {
+
+            timeGameCheck = Date.now();
+            console.log("ahora");
+            console.log(timeGameCheck);
+
+        }
+
+        else if (status == 4) {
+
+            status = 0;
+            resetGame();
+        }
+
+    }
+    // calls the init function when the window is done loading.
+    window.onload = init;
+    // calls the handleResize function when the window is resized
+    window.addEventListener('resize', handleResize, false);
+
+    //add event listener
+    window.addEventListener('touchstart', function(event) {
+
+        socket.emit('click0', true);
+        changeStatus();
+
+    });
+
+    //add event listener
+    window.addEventListener('click', function(event) {
+
+        socket.emit('click0', true);
+        changeStatus();
+
+    });
+
+</script>
+<body>
+</body>
+</html>

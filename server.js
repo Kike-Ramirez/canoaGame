@@ -6,6 +6,10 @@ var io = require('socket.io')(http);
 
 app.use(express.static('public'));
 
+app.get('/', function(req, res){
+  res.sendfile('river.html');
+});
+
 app.get('/canoa0', function(req, res){
   res.sendfile('river0.html');
 });
