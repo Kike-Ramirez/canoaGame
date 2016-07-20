@@ -531,9 +531,9 @@
             // Calculamos el avance de la canoa 0
             remo0.setRotationFromQuaternion(gyro0);
 
-            if (refX0 - remo0.rotation.x > 0.02) {
+            if (refX0 - remo0.rotation.x > 0.005) {
 
-                speedX0 = speedX0 + 0.2;
+                speedX0 = speedX0 + 0.4;
                 remando0 = true;
 
             }
@@ -541,7 +541,7 @@
             refX0 = remo0.rotation.x;
                 
             canoa0.position.y = canoa0.position.y + speedX0;
-            if (speedX0 > 5) speedX0 = 5;
+            if (speedX0 > 10) speedX0 = 10;
             if (speedX0 > 0) speedX0 = speedX0 - 0.03;
             if (speedX0 < 0) speedX0 = 0;
 
@@ -566,9 +566,9 @@
             remo1.setRotationFromQuaternion(gyro1);
 
 
-            if (refX1- remo1.rotation.x > 0.02) {
+            if (refX1- remo1.rotation.x > 0.005) {
 
-                speedX1 = speedX1 + 0.2;
+                speedX1 = speedX1 + 0.4;
                 remando1 = true;
                     
             }
@@ -576,7 +576,7 @@
             refX1 = remo1.rotation.x;
                 
             canoa1.position.y = canoa1.position.y + speedX1;
-            if (speedX1 > 5) speedX1 = 5;
+            if (speedX1 > 10) speedX1 = 10;
             if (speedX1 > 0) speedX1 = speedX1 - 0.03;
             if (speedX1 < 0) speedX1 = 0;
 
