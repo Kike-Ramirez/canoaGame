@@ -18,12 +18,22 @@ app.get('/remo1', function(req, res){
   res.sendfile('remo1.html');
 });
 
+app.get('/remo1', function(req, res){
+  res.sendfile('remo1.html');
+});
+
 io.on('connection', function(socket){  
   socket.on('acc0', function(msg){
     io.emit('acc0', msg);
   });
     socket.on('acc1', function(msg){
     io.emit('acc1', msg);
+  });
+    socket.on('click0', function(msg){
+    io.emit('click0', msg);
+  });
+    socket.on('click1', function(msg){
+    io.emit('click1', msg);
   });
 });
 
