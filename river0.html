@@ -393,7 +393,8 @@
 
         if (status == 1) {
 
-            
+            text.innerHTML = "";
+            text3.innerHTML = "";
             timeCount = (Date.now() - timeCountCheck) / 1000;
 
             if (timeCount < 1) text2.innerHTML = "3";
@@ -567,6 +568,8 @@
         canoa0.position.y = 0;
         canoa1.position.y = 0;
         camera.position.y = canoa0.position.y + 300;
+        speedX0 = 0;
+        speedX1 = 0;
 
     }
 
