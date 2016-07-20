@@ -49,6 +49,13 @@
 
   setInterval(function(){ socket.emit('acc1', acc); }, 50);
 
+
+  window.addEventListener('touchstart', function(event) {
+
+        socket.emit('click', true);
+
+  });
+
 </script>
 
 </html>
