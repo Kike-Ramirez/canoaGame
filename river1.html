@@ -61,7 +61,7 @@
     var socket;
     var rocks, rockGeometry, rockMaterial, rockTextures;
     var indice0, indice1;
-    var text, text2, text3, text4, text5;
+    var text, text2, text3, text4, text5, text6, text7;
 
     // 0: idle - 1: cuenta atras - 2: playing - 3: ended
     var status;
@@ -189,6 +189,19 @@
         text6.style.left = 400 + 'px';
         text6.className = "text-big";
         document.body.appendChild(text6);
+
+        // Textos en pantalla
+        text7 = document.createElement('div');
+        text7.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text7.style.width = 100;
+        text7.style.height = 100;
+        text7.style.backgroundColor = "transparent";
+        text7.innerHTML = "";
+        text7.style.top = 350 + 'px';
+        text7.style.left = 400 + 'px';
+        text7.className = "text-big";
+        document.body.appendChild(text7);
 
         // add the output of the renderer to the html element
         document.body.appendChild(renderer.domElement);
@@ -445,6 +458,7 @@
             text4.innerHTML = "";
             text5.innerHTML = "";
             text6.innerHTML = "";
+            text7.innerHTML = "";
         }
 
         if (status == 1) {
@@ -454,6 +468,7 @@
             text3.innerHTML = "";
             text4.innerHTML = "";
             text5.innerHTML = "";
+            text7.innerHTML = "";
             timeCount = (Date.now() - timeCountCheck) / 1000;
 
             if (timeCount < 1) text6.innerHTML = "3";
@@ -467,10 +482,11 @@
         else if (status == 3) {
             console.log("Terminado");
             text.innerHTML = "";
+            text6.innerHTML = "";
 
             if (winner == 0) text6.innerHTML = "YOU LOOSE..."
             else if (winner == 1) text6.innerHTML = "YOU WIN!!"
-            else text2.innerHTML = "DRAW"
+            else text6.innerHTML = "DRAW"
         }
 
         else if (status == 2) {
