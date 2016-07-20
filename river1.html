@@ -186,7 +186,7 @@
         text6.style.backgroundColor = "transparent";
         text6.innerHTML = "";
         text6.style.top = 350 + 'px';
-        text6.style.left = 650 + 'px';
+        text6.style.left = 550 + 'px';
         text6.className = "text-big";
         document.body.appendChild(text6);
 
@@ -474,6 +474,8 @@
         }
 
         else if (status == 2) {
+
+            text6.innerHTML = ""
 
             if (canoa0.position.y > canoa1.position.y) text.innerHTML = "You are Losing..."
             else if (canoa0.position.y < canoa1.position.y) text.innerHTML = "You are Leading..."
