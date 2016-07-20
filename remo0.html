@@ -37,15 +37,17 @@
 
 
   var socket = io();
+  var acc;
 
   window.ondeviceorientation = function(event) {
     alpha = Math.round(event.alpha);
     beta = Math.round(event.beta);
     gamma = Math.round(event.gamma);
-    var acc = [alpha, beta, gamma];
-    socket.emit('acc0', acc);
+    acc = [alpha, beta, gamma];
 
   }
+
+  setInterval(function(){ socket.emit('acc0', acc); }, 50);
 
 </script>
 
