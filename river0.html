@@ -53,7 +53,7 @@
     var socket;
     var rocks, rockGeometry, rockMaterial, rockTextures;
     var indice0, indice1;
-    var text, text2, text3;
+    var text, text2, text3, text4;
 
     // 0: idle - 1: cuenta atras - 2: playing - 3: ended
     var status;
@@ -111,7 +111,7 @@
         text.style.width = 100;
         text.style.height = 100;
         text.style.backgroundColor = "transparent";
-        text.innerHTML = "Distancia a Meta: " + (Math.floor(meta.position.y - canoa0.position.y)).toString() + "<br> Distancia a oponente: " + (Math.floor(canoa0.position.y - canoa1.position.y)).toString();
+        text.innerHTML = ""
         text.style.top = 20 + 'px';
         text.style.left = 20 + 'px';
         text.className = "text-small";
@@ -142,6 +142,19 @@
         text3.className = "text-small";
         document.body.appendChild(text3);
 
+        // Textos en pantalla
+        text4 = document.createElement('div');
+        text4.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text4.style.width = 100;
+        text4.style.height = 100;
+        text4.style.backgroundColor = "transparent";
+        text4.innerHTML = "";
+        text4.style.top = 20 + 'px';
+        text4.style.left = 800 + 'px';
+        text4.className = "text-small";
+        document.body.appendChild(text3);
+
         // add the output of the renderer to the html element
         document.body.appendChild(renderer.domElement);
 
@@ -162,8 +175,7 @@
      */
     function render() {
 
-        // Render texts
-        text.innerHTML = "Distancia a Meta: " + (Math.floor(meta.position.y - canoa0.position.y)).toString() + "<br> Distancia a oponente: " + (Math.floor(canoa0.position.y - canoa1.position.y)).toString();
+        
         // render using requestAnimationFrame
         updateRiver();
         updateCanoas();
@@ -221,7 +233,7 @@
         meta = new THREE.Mesh(metaGeometry, metaMaterial);
         meta.position.x = 0;
         meta.position.y = 1000;
-        meta.position.z = 20;
+        meta.position.z = 30;
         scene.add(meta);
 
         // Create Salida
@@ -395,6 +407,7 @@
 
             text.innerHTML = "";
             text3.innerHTML = "";
+            text4.innerHTML = "";
             timeCount = (Date.now() - timeCountCheck) / 1000;
 
             if (timeCount < 1) text2.innerHTML = "3";
@@ -408,6 +421,7 @@
         else if (status == 3) {
             console.log("Terminado");
             text.innerHTML = "";
+
             if (winner == 0) text2.innerHTML = "YOU WIN!!"
             else if (winner == 1) text2.innerHTML = "YOU LOOSE..."
             else text2.innerHTML = "DRAW"
@@ -415,6 +429,11 @@
 
         else if (status == 2) {
 
+            if (canoa0.position.y > canoa1.position.y) text.innerHTML = "You are Leading..."
+            else if (canoa0.position.y < canoa1.position.y) text.innerHTML = "You are Losing..."
+            else text.innerHTML = "You are tied..."
+
+            text4.innerHTML = "Distance to Goal: " + (Math.floor(meta.position.y - canoa0.position.y)).toString() + " m <br> Speed: " + (Math.floor(speedX0)).toString();
 
             timeGame = Math.floor((Date.now() - timeGameCheck) / 1000);
 
