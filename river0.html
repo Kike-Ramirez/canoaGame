@@ -237,7 +237,7 @@
     function initRiver() {
 
         // create the ground plane
-        planeGeometry = new THREE.PlaneGeometry(1920, 1080);
+        planeGeometry = new THREE.PlaneGeometry(2304, 1296);
         planeTexture = THREE.ImageUtils.loadTexture( "/img/fondo.png" );
         planeTexture.minFilter = THREE.NearestFilter;
         planeMaterial = new THREE.MeshLambertMaterial({color: 'white', map: planeTexture });
@@ -253,7 +253,7 @@
         plane0.position.z = 0;
 
         plane1.position.x = 0; 
-        plane1.position.y = 1280; 
+        plane1.position.y = 1496; 
         plane1.position.z = 0; 
 
         // add the plane to the scene
