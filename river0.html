@@ -384,6 +384,13 @@
 
     function updateCanoas() {
 
+        if (status == 0) {
+
+            text.innerHTML = "";
+            text2.innerHTML = "SummerGame<br>by espadaysantacruz";
+            text3.innerHTML = "";
+        }
+
         if (status == 1) {
 
             
@@ -400,7 +407,6 @@
         else if (status == 3) {
             console.log("Terminado");
             text.innerHTML = "";
-            text3.innerHTML = "";
             if (winner == 0) text2.innerHTML = "YOU WIN!!"
             else if (winner == 1) text2.innerHTML = "YOU LOOSE..."
             else text2.innerHTML = "DRAW"
