@@ -186,22 +186,10 @@
         text6.style.backgroundColor = "transparent";
         text6.innerHTML = "";
         text6.style.top = 350 + 'px';
-        text6.style.left = 400 + 'px';
+        text6.style.left = 380 + 'px';
         text6.className = "text-big";
         document.body.appendChild(text6);
 
-        // Textos en pantalla
-        text7 = document.createElement('div');
-        text7.style.position = 'absolute';
-        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
-        text7.style.width = 100;
-        text7.style.height = 100;
-        text7.style.backgroundColor = "transparent";
-        text7.innerHTML = "";
-        text7.style.top = 350 + 'px';
-        text7.style.left = 400 + 'px';
-        text7.className = "text-big";
-        document.body.appendChild(text7);
 
         // add the output of the renderer to the html element
         document.body.appendChild(renderer.domElement);
@@ -458,7 +446,6 @@
             text4.innerHTML = "";
             text5.innerHTML = "";
             text6.innerHTML = "";
-            text7.innerHTML = "";
         }
 
         if (status == 1) {
@@ -468,7 +455,6 @@
             text3.innerHTML = "";
             text4.innerHTML = "";
             text5.innerHTML = "";
-            text7.innerHTML = "";
             timeCount = (Date.now() - timeCountCheck) / 1000;
 
             if (timeCount < 1) text6.innerHTML = "3";
