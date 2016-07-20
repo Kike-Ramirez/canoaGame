@@ -689,6 +689,14 @@
 
     });
 
+    //add event listener
+    window.addEventListener('click', function(event) {
+
+        socket.emit('click1', true);
+        changeStatus();
+
+    });
+
 </script>
 <body>
 </body>
