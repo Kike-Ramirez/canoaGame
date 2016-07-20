@@ -61,7 +61,7 @@
     var socket;
     var rocks, rockGeometry, rockMaterial, rockTextures;
     var indice0, indice1;
-    var text, text2, text3, text4, text5, text6;
+    var text, text2, text3, text4, text5, text6, text7;
 
     // 0: idle - 1: cuenta atras - 2: playing - 3: ended
     var status;
@@ -190,6 +190,19 @@
         text6.style.align = "center";
         text6.className = "text-big";
         document.body.appendChild(text6);
+
+        // Textos en pantalla
+        text7 = document.createElement('div');
+        text7.style.position = 'absolute';
+        //text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
+        text7.style.width = 100;
+        text7.style.height = 100;
+        text7.style.backgroundColor = "transparent";
+        text7.innerHTML = "";
+        text7.style.top = 50 + 'px';
+        text7.style.left = 50 + 'px';
+        text7.className = "text-small";
+        document.body.appendChild(text5);
 
         // add the output of the renderer to the html element
         document.body.appendChild(renderer.domElement);
@@ -453,6 +466,7 @@
             text4.innerHTML = "";
             text5.innerHTML = "";
             text6.innerHTML = "";
+            text7.innerHTML = "";
         }
 
         if (status == 1) {
@@ -462,6 +476,7 @@
             text3.innerHTML = "";
             text4.innerHTML = "";
             text5.innerHTML = "";
+            text7.innerHTML = "";
             timeCount = (Date.now() - timeCountCheck) / 1000;
 
             if (timeCount < 1) text6.innerHTML = "THREE...";
@@ -476,6 +491,7 @@
             console.log("Terminado");
             text.innerHTML = "";
             text6.innerHTML = "";
+            text7.innerHTML = "";
 
             if (winner == 0) text6.innerHTML = "1 WIN!!"
             else if (winner == 1) text6.innerHTML = "2 WIN!!"
@@ -501,6 +517,8 @@
 
              
             text5.innerHTML = "Speed Player 1: " + (Math.floor(speedX0)).toString() + " km/h <br>Speed Player 2: " + (Math.floor(speedX1)).toString() + " km/h";
+
+            text7.innerHTML = "Distance 1-2: " + (Math.abs(Math.floor(canoa0.position.y - canoa1.position.y))).toString();
 
             timeGame = Math.floor((Date.now() - timeGameCheck) / 1000);
 
@@ -670,6 +688,8 @@
         plane1.position.x = 0; 
         plane1.position.y = 1496; 
         plane1.position.z = 0; 
+
+        flechaDOWN.position.z = -50;
 
     }
 
