@@ -325,8 +325,13 @@
 
     function updateRiver() {
 
-        if (plane0.position.y - canoa0.position.y < -1096) plane0.position.y += 2 * 1296;
-        if (plane1.position.y - canoa0.position.y < -1096) plane1.position.y += 2 * 1296;
+        var posy = 0;
+
+        if (canoa0.position.y > canoa1.position.y) posy = canoa0.position.y;
+        else posy = canoa1.position.y;
+
+        if (plane0.position.y - posy < -1096) plane0.position.y += 2 * 1296;
+        if (plane1.position.y - posy < -1096) plane1.position.y += 2 * 1296;
 
     }
 
