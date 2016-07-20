@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+  </head>
+  <style>
+    body {
+    /* Ubicación de la imagen */
+    background-image: url(img/remo_jugador_DOS.jpg);
+
+    /* Nos aseguramos que la imagen de fondo este centrada vertical y
+      horizontalmente en todo momento */
+    background-position: center center;
+
+    /* La imagen de fondo no se repite */
+    background-repeat: no-repeat;
+
+    /* La imagen de fondo está fija en el viewport, de modo que no se mueva cuando
+       la altura del contenido supere la altura de la imagen. */
+    background-attachment: fixed;
+
+    /* La imagen de fondo se reescala cuando se cambia el ancho de ventana
+       del navegador */
+    background-size: cover;
+
+    /* Fijamos un color de fondo para que se muestre mientras se está
+      cargando la imagen de fondo o si hay problemas para cargarla  */
+    background-color: #464646;
+  }
+  </style>
+  <body>
+  </body>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+
+
+  var socket = io();
+  var acc;
+
+  window.addEventListener('touchstart', function(event) {
+
+        socket.emit('click', true);
+
+  });
+
+</script>
+
+</html>

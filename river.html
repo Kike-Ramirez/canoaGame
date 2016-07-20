@@ -448,7 +448,7 @@
         indice1 = 0;
         camera.position.y = canoa0.position.y + 300;
 
-        socket.on('click1', function(msg){
+        socket.on('click', function(msg){
             
             changeStatus();
 
@@ -724,7 +724,6 @@
     //add event listener
     window.addEventListener('touchstart', function(event) {
 
-        socket.emit('click0', true);
         changeStatus();
 
     });
@@ -732,7 +731,6 @@
     //add event listener
     window.addEventListener('click', function(event) {
 
-        socket.emit('click0', true);
         changeStatus();
 
     });
